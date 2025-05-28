@@ -50,10 +50,13 @@ with engine.connect() as conn:
         select ifnull(max(empno), 0)+1 
         from emp 
     """
-    result = conn.execute(sql) #[()]
+    result = conn.execute(text(sql)) #[()]
     empno = result.all()[0][0]
     sql = """
         insert into emp(empno, ename, sal)
         values(:empno, :ename, :sal)
     """
-    conn.execute(text(sql), [{"empno":empno, "ename":""}])
+    conn.execute(text(sql), 
+                 [{"empno":empno, "ename":"홍길동"+str(empno), 
+                   "sal":9000}])
+    
