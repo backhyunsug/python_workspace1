@@ -59,4 +59,44 @@ with engine.connect() as conn:
     conn.execute(text(sql), 
                  [{"empno":empno, "ename":"홍길동"+str(empno), 
                    "sal":9000}])
+    conn.commit() #커밋 반드시
+
+
+#3.insert  - 트랜잭션 처리 - 트랜잭션처리가 안되는경우 
+# with engine.connect() as conn:
+#     sql = """
+#         select ifnull(max(id), 0)+1  from test1
+#     """
+#     result = conn.execute(text(sql))
+#     id = result.all()[0][0]
+#     sql ="""
+#         insert into test1 values(:id, :field1)
+#     """
+#     conn.execute(text(sql), [{"id":id, "field1":"test"}])
+#     conn.commit()
+
+#     sql ="""
+#         insert into test2 values(:id, :field1)
+#     """
+#     conn.execute(text(sql), [{"id":id, 
+#                 "field1":"test12345678"}])
+#     conn.commit()
+
+#트랜잭션 처리가 필요할 경우에 
+#ACID(atomic, consistancy, isolation, Durability ) 
+with engine.begin() as conn:
+    sql = """
+        select ifnull(max(id), 0)+1  from test1
+    """
+    result = conn.execute(text(sql))
+    id = result.all()[0][0]
+    sql ="""
+        insert into test1 values(:id, :field1)
+    """
+    conn.execute(text(sql), [{"id":id, "field1":"test"}])
     
+    sql ="""
+        insert into test2 values(:id, :field1)
+    """
+    conn.execute(text(sql), [{"id":id, 
+                "field1":"test1234"}])
