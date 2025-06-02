@@ -48,7 +48,7 @@ class MyList:
         #메모리관리를 알아서 한다 
         self.head.next = self.tail 
 
-    def insertOrder(self, data):
+    def insertOrder(self, data, myfunc=None):
         temp = Node(data)
         #1.위치 찾기 
         t1 = self.head.next
@@ -57,12 +57,20 @@ class MyList:
         flag = False #while 문을 종료하기 위한 조건 
         #not flag  : flag 값이 False인동안 반복하라 
         while not flag and t1!=self.tail:
-              if t1.data > temp.data:
-                  flag = True  #탐색을 중단 
-              else:
-                  t1 = t1.next 
-                  t2 = t2.next 
 
+              if myfunc == None:
+                if t1.data > temp.data:
+                    flag = True  #탐색을 중단 
+                else:
+                    t1 = t1.next 
+                    t2 = t2.next
+              else:
+                if myfunc(t1.data) > myfunc(temp.data):
+                    flag=True       
+                else:
+                    t1 = t1.next 
+                    t2 = t2.next
+               
         #t2와 t1사이에 temp를 끼워넣는다 
         temp.next = t1 
         t2.next = temp 
@@ -108,20 +116,25 @@ class Book:
         if self.title > other.title:
             return True 
         return False 
-    
+
     def __str__(self):
         return f"{self.title} {self.author} {self.publisher}"
-                
-print( Book("마법사의돌", "조앤롤링", "해냄") > 
-       Book("마법사의돌", "조앤롤링", "해냄"))
-print( Book("마법사의돌", "조앤롤링", "해냄") > 
-       Book("그리고아무도없었다", "아가사크리스티", "해냄"))
+    
+def myfunc(o):
+    return o.title 
+
+
+print( myfunc(Book("마법사의돌", "조앤롤링", "해냄")) > 
+       myfunc(Book("마법사의돌", "조앤롤링", "해냄")))
+print( myfunc(Book("마법사의돌", "조앤롤링", "해냄")) > 
+       myfunc(Book("그리고아무도없었다", "아가사크리스티", "해냄")))
 
 m2 = MyList()
-m2.insertOrder( Book("마법사의돌", "조앤롤링", "해냄") )
-m2.insertOrder( Book("쌍갑포차", "배혜수", "카카오") )
-m2.insertOrder( Book("뽀짜툰",   "유리", "카카오") )
-m2.insertOrder( Book("무빙",     "강풀", "카카오") )
+m2.insertOrder(Book("마법사의돌", "조앤롤링", "해냄"), myfunc)
+m2.insertOrder(Book("그리고아무도없었다", "아가사크리스티", "해냄"), myfunc)
+m2.insertOrder(Book("쌍갑포차", "배혜수", "카카오"), myfunc)
+m2.insertOrder(Book("아지갑놓고나왔다", "미역", "카카오"), myfunc)
+m2.insertOrder(Book("앵무새죽이기", "하퍼리", "창작과비평"), myfunc)
 m2.print2()
 
 
