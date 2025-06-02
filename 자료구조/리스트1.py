@@ -104,11 +104,14 @@ class Book:
         self.title = title 
         self.author = author 
         self.publisher = publisher  
+
     def __gt__(self, other):  # > 연산자 중복 
         if self.title > other.title:
             return True 
         return False 
     
+
+
     def __str__(self):
         return f"{self.title} {self.author} {self.publisher}"
                 
@@ -123,6 +126,18 @@ m2.insertOrder( Book("쌍갑포차", "배혜수", "카카오") )
 m2.insertOrder( Book("뽀짜툰",   "유리", "카카오") )
 m2.insertOrder( Book("무빙",     "강풀", "카카오") )
 m2.print2()
+
+b1 = Book("쌍갑포차")
+b2 = Book("쌍갑포차")
+#b1 = b2 
+print( b1 == b2 ) #b1과 b2의 내용 비교가 아니고, 
+s1=str("hello") 
+s2=str("hello") 
+print( s1 == s2)
+#b1 이 참조만 저장 , b2도 참조만 저장 
+#둘이 동일한 객체를 참조하고 있는가? 
+# "hello".equals(temp)
+
 
 
 
