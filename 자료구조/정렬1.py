@@ -106,9 +106,37 @@ bubbleSort1(arr)
 def bubbleSort2(arr):
     ln = len(arr)
     for i in range(0, ln):
+        flag = False #if문안에 들어갔었는지 확인하기 
         for j in range(0, ln-i-1):
             if arr[j] > arr[j+1]:
+                flag=True #if문 안에 들어갔었다는 얘기는 데이터 변동이 있었음
                 arr[j], arr[j+1] = arr[j+1], arr[j]
+        if not flag:
+            break #for문 종료  
         print( arr )
 
     print(arr)
+
+print("bubble2")
+arr = [3, 5, 7, 6, 8, 9, 25]
+bubbleSort2(arr)
+"""
+알고리즘 -  속도가 빠르면 메모리를 많이 차지함 
+          속도가 느리면 메모리 덜차지 
+          trade-off 
+          최근에는 메모리가 엄청 싸다 속도위주의 알고리즘을 선택한다
+
+퀵정렬 - 재귀호출 
+
+               8, 9, 2,4, 24, 21,  3, 6, 7, 11, 12, 13 
+
+기준점  0~11   0번방을 기준으로 
+              left =0 
+              right=11 
+              a[0]>a[left] 일때까지 left증가   
+              left = 1
+              a[0]<a[right] 일때까지 right 감소
+              right = 8
+
+
+"""
