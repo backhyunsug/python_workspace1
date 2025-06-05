@@ -186,6 +186,6 @@ def quicksort(arr, start, end):
     quicksort(arr, right+1, end)
       
 
-print("---------qucik 정렬 --------")
+print("---------quick 정렬 --------")
 quicksort(arr, 0, len(arr)-1)
 print(arr)
