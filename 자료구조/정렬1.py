@@ -137,6 +137,55 @@ bubbleSort2(arr)
               left = 1
               a[0]<a[right] 일때까지 right 감소
               right = 8
+              a[left] <==> a[right]
 
+            8, 7, 2,4, 24, 21,  3, 6, 9, 11, 12, 13
+            left<=right인동안 반복
+            left = 4
+            right = 7
+            8, 7, 2,4, 6, 21,  3, 24, 9, 11, 12, 13
+            left = 5 
+            right = 6
+
+            3, 7, 2,4, 6, 8,  21, 24, 9, 11, 12, 13
+            left = 6
+            right = 5 
+            0~4               6~11
+            3,7,2,4,6          21,24,9,11,12,13 
 
 """
+
+arr = [5,1,6,4,8,3,7,9,2,10]
+#arr[0~9] 
+#arr[0~4], 기준점, a[6, 9]  
+def quicksort(arr, start, end):
+    #재귀호출이라 끝나는 시점 
+    if start>=end:
+        return 
+    #기준점 
+    pivot=arr[start] 
+    left = start+1 
+    right = end 
+    print(f"left:{left} right:{right}")
+    while left<=right: #left>right면 배분이 종료한거라서 
+        #left증가시키면서 arr[left]가 pivot 보다 큰값을 만날때까지 
+        #left가 end보다 작은동안 
+        while left<=end and arr[left]<pivot:
+            left+=1 
+        while right>start and arr[right]>pivot:
+            right-=1         
+        print(f"left:{left} {arr[left]} right:{right} {arr[right]}")
+        
+        if left < right: #왼쪽 오른쪽이 서로 자리 바꾸어야 하는것이 있다
+            arr[left], arr[right] = arr[right], arr[left]
+        else: #같을 경우
+            break   
+    arr[start], arr[right] = arr[right], arr[start]
+    print(arr)  
+    quicksort(arr, start, right-1)
+    quicksort(arr, right+1, end)
+      
+
+print("---------qucik 정렬 --------")
+quicksort(arr, 0, len(arr)-1)
+print(arr)
