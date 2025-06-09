@@ -24,7 +24,7 @@ def postorder(node):
         postorder(node.right)   
         print(node.data, end="\t")     
 #클래스를 안만들면 
-root = None   
+  
 def insertNode(data=None):
     #트리에 추가되기 위해서 노드를 하나 만든다. 
     newNode = TreeNode(data)
@@ -61,15 +61,65 @@ def levelorder(node): #너비 탐색
         if current.right !=None:
             queue.appendleft( current.right )
 
-if __name__ == "__main__":
-    root = TreeNode("A")
-    root.left = TreeNode("B")
-    root.right = TreeNode("C")
-    root.left.left=TreeNode("D")
-    root.left.right=TreeNode("E")
-    root.right.left=TreeNode("F")
-    root.right.right=TreeNode("G")
+#addNode : 부모 노드와 원하는 방향을 부여하고 데이터를 주면 그 위치에 노드를 추가하는 함수
+#bLeft 값이 True이면 왼쪽으로 붙이고 False면 오른쪽으로 붙이려고 한다
+root = None # list, dict 은 가능 
+def addNode(parent=None, left=True, data=None):
+    global root #전역변수, 함수 외부에서 변수에 접근 불가능  
+
+    temp = TreeNode(data)
+    if parent == None:
+        root = temp 
+    else:
+        if left:
+            parent.left = temp 
+        else:
+            parent.right = temp 
+
+    return temp 
+
+def makeTree1():
+    root = addNode(None, True, data="A")#parent를 값을 안주면 디폴트로 None 이 들어감 
+
+    level1 = addNode(root, True, "B")
+    level2 = addNode(root, False, "C")
+
+    addNode(level1, True, "D")
+    addNode(level1, False, "E")
+
+    addNode(level2, True, "F")
+    addNode(level2, False, "G")
     
+"""
+    1.큐만들기 
+    2.큐에 root 노드 추가 
+        3. 추가될 위치 찾기 - 낑겨들어갈 위치찾기, 추가될때까지 
+            3-1. 큐에서 하나 가져온다 
+            3-2  가져온 노드의 left 가 None이면 여기에 추가하고 종료 
+                None이 아니면 left값을 다시 큐에 넣는다 
+            3-3  가져온 노드의 right 가 None이면 여기에 추가하고 종료 
+                None이 아니면 right값을 다시 큐에 넣는다 
+            
+4. 모든 요소가 추가될때까지 1,2,3 을 반복한다. 
+
+"""
+
+
+
+
+     
+
+if __name__ == "__main__":
+    # root = TreeNode("A")
+    # root.left = TreeNode("B")
+    # root.right = TreeNode("C")
+    # root.left.left=TreeNode("D")
+    # root.left.right=TreeNode("E")
+    # root.right.left=TreeNode("F")
+    # root.right.right=TreeNode("G")
+    #makeTree("ABCDEFGHIJKL")
+    makeTree1()
+
     print("inorder : ", end="\t")
     inorder(root)
     print() 
