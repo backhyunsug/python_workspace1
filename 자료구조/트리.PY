@@ -103,11 +103,30 @@ def makeTree1():
 4. 모든 요소가 추가될때까지 1,2,3 을 반복한다. 
 
 """
-
-
-
-
-     
+#makeTree2("ABCDEFGHIK")
+def makeTree2(simbol):
+    global root 
+    
+    for c in simbol: #
+        q = deque() #큐만들기 
+        if root == None:
+            root = TreeNode(c)
+            continue  #반복구조에서 continue 아래 문장 건너뛰고, 다시 조건식으로 이동
+                      #else 구문 쓰기 싫음 
+        q.appendleft(root)
+        #내가추가될때까지 
+        append = False 
+        while not append:
+            node = q.pop() 
+            if node.left ==None:
+                addNode(node, True, c)
+                append = True 
+            elif node.right ==None:
+                addNode(node, False, c)
+                append = True   
+            else:
+                q.appendleft(node.left)
+                q.appendleft(node.right) 
 
 if __name__ == "__main__":
     # root = TreeNode("A")
@@ -118,8 +137,8 @@ if __name__ == "__main__":
     # root.right.left=TreeNode("F")
     # root.right.right=TreeNode("G")
     #makeTree("ABCDEFGHIJKL")
-    makeTree1()
-
+    #makeTree1()
+    makeTree2("ABCDEFGHIK")
     print("inorder : ", end="\t")
     inorder(root)
     print() 
