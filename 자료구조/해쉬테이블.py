@@ -99,10 +99,27 @@ class HashTable:
                 trace = trace.next 
             print() 
 
+    def search(self, word):
+        #1.키값부터 구한다
+        key = self.getHash(word)
+        trace = self.bucketList[key].next 
+        find =False 
+        while trace!=None and not find:
+            if trace.data == word: 
+                find = True 
+            else: 
+                trace = trace.next 
+        if not find:
+            print("Not found")
+        else:
+            print("found") 
+
 hash = HashTable()
 hash.createTable([("school"), ("desk"), ("chair"), ("rain"), ("survey"),
                   ("house"), ("home"), ("doll"), ("python"), 
                   ("java"), ("html"), ("javascript")])
 hash.printList()
+print()
+hash.search("house")
 
 
