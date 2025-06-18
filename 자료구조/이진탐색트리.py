@@ -110,9 +110,15 @@ class BinarySearchTree:
         
         if current.left != None or current.right!= None:
             if current.left != None: #왼쪽에 자식이 있으면 그 자식을 가져온다
-                current.data = current.left.data
+                if parent.left == current:
+                    parent.left = current.left
+                else:
+                    parent.right = current.right    
             else: #오른쪽에 자식이 있음 
-                current.data = current.right.data
+                if parent.left == current:
+                    parent.left = current.left
+                else:
+                    parent.right = current.right 
             return 
         
 
