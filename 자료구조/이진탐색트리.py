@@ -6,8 +6,8 @@
 # 16 8 9 2 4 12,17, 21, 23       나보다 작은값은 왼쪽으로 나보다 큰값은 오른쪽으로 
 #           16
 #      8        17 
-#    2   9         21
-#   4      12         23 
+#    2   10         21
+#   4   9   12         23 
 
 #Dict을 써도 되고 특정 데이터 타입만 저장하고 싶다면 
 class Data:
@@ -82,6 +82,7 @@ class BinarySearchTree:
         find = False #못찾을 
         while current and not find:
             if current.data.num == key.num:
+                #print("***", current.data.num)
                 find = True 
             else:
                 parent = current 
@@ -90,16 +91,20 @@ class BinarySearchTree:
                 else:
                     current = current.right 
 
-        return find, parent, current 
+        #print(find, parent, current , key.num)
+        return find, parent, current,  
                 
     def delete(self, key):
         #삭제하려고 할 경우에 삭제될 노드를 찾아야 한다. 
         if self.root == None:
             return 
         found, parent, current = self.find(key) 
+        
         if found == False: #삭제 대상이 없다. 
             return         
         
+        #print( "*******", found, parent, current )
+        #return 
         #1. 삭제대상이 자식이 없는 경우 - 그냥 나를 삭제하면 된다. 
         if current.left==None and current.right==None:
             if parent.left ==current: #내가 부모 노드의 왼쪽에 있었다면 
@@ -107,36 +112,38 @@ class BinarySearchTree:
             else:                     #내가 부모의 오른쪽에 있었다면 
                 parent.right=None 
             return 
-        
-        if current.left != None or current.right!= None:
-            if current.left != None: #왼쪽에 자식이 있으면 그 자식을 가져온다
-                if parent.left == current:
-                    parent.left = current.left
-                else:
-                    parent.right = current.right    
-            else: #오른쪽에 자식이 있음 
-                if parent.left == current:
-                    parent.left = current.left
-                else:
-                    parent.right = current.right 
+        # not(A or B) => not A and not B  
+        if current.left == None and current.right!=None  \
+            or current.right== None and current.left!= None:
+            if current.left:
+                parent.left = current.left
+            else:
+                parent.right = current.right    
             return 
         
-
         #자식이 둘다 있을때 트리 전체를 재편한다 
         #삭제될 대상의 오른쪽 서브트리에서 가장 작은 대상을 
         #찾아 바꿔치기를 한다 
         #탐색을 다시 해야 한다 
-        
+        subParent = current #삭제 대상 
+        subCurrent = current.right 
+        print(subCurrent)
+        #탐색을 서브트리의 왼쪽으로 왜? 작은 거는 왼쪽으로 큰거는 오른쪽으로 
+        while subCurrent.left:
+            subParent = subCurrent 
+            subCurrent = subCurrent.left  
 
-
-
-
-
-
+        current.data=subCurrent.data   #아래의 큰 수를 옮긴다. 
+        if subParent.left == subCurrent:
+            subParent.left = subCurrent.right 
+        else:
+             subParent.right = subCurrent.right
+    
+       
 
 if __name__=="__main__":
     bst = BinarySearchTree()
-    arr = [16, 8, 9, 2, 4, 12,17, 21, 23]
+    arr = [16, 8, 10, 9, 2, 4, 12,17, 21, 23]
     for i in arr:
         bst.insert(Data(i))
     bst.inorder(bst.root)
@@ -144,6 +151,15 @@ if __name__=="__main__":
     print(bst.search(Data(16)))
     print(bst.search(Data(2)))
     print(bst.search(Data(26)))
+    
+    bst.delete(Data(8))
+    bst.inorder(bst.root)
+    print(bst.search(Data(8)))
+
+    bst.delete(Data(16))
+    #print(bst.search(Data(16)))
+    bst.inorder(bst.root)
+    
 
 
 
