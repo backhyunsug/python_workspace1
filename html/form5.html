@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+
+        <form action="">
+            <label for="gender">남/여</label>
+            <input type="checkbox" name="gender" id="gender" checked><br/>
+            
+            <h1>readonly/disabled 속성</h1>
+            <p>둘다 브라우저에서 데이터 입력을 못받게 한다는 공통점이 있음 disabled는 
+                아예 작동이 안돼서 서버로 값 전달도 안한다. disabled이 속성은 버튼을 아예
+                못누르게 하고자 할때 많이 사용하고 readonly는 input태그에 값 입력못하게
+                하고자 할때 주로 사용한다. 
+            </p>
+            <input type="text" name="key1" value="34" readonly><br/>
+            <input type="text" name="key2" value="54" disabled><br/>
+
+            <input type="number" id="quantity" name="quantity" 
+                min="0" max="100" step="10" value="30">
+            <input type="range" id="quantity2" name="quantity2"
+                min="0" max="100" step="10" value="30">
+
+            <button>보내기</button>
+        </form>
+    </body>
+</html>
+

@@ -1,0 +1,14 @@
+HTML : Hyper <span style="color:red">Text</span> Markup Language 
+html version 5 
+MS사가 문서가 너무 길면 드레그 해서 보기 쉽지 않음 
+문서중간에  링크를 두고 클릭하면 특정위치로 이동을 한다. 
+
+색상    정수를 저장하는데 필요한 공간이 4byte 임 
+       red - 1byte           양의정수 1byte  0000 0000   1111 1111 
+       green - 1byte                        0 ~ 255  
+       blue - 1byte                         0~ff 
+       
+       0이면 빛이 없다.        1 1 1 1      rgb(0~255, 0~255, 0~255)
+                            1byte 는 투명도 
+       255,255,255 - white    #ff0000  rgb(255,0,0)
+        

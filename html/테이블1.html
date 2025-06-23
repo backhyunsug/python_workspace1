@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* table, th, tr   th-행, tr-행  th태그는 글자가 강조되서 보인다*/
+        table, th, tr, td {
+            border: 1px solid black;
+            border-collapse: collapse; 
+        }
+
+        table{
+            /* border:7px solid red; */
+            /*
+            css 주석 
+            width 단위 px(컴퓨터의 해상도에 따라서 크기가 달라진다. )
+            화면을 가로/세로로 쪼갠다 -> 조각이 픽셀 
+            % - 화면에 일정비율을 사용한다. 
+            */
+            width: 80%;
+            margin-left: auto; /* 여백 자동으로 잡아라*/
+            margin-right: auto;
+        }
+
+        td{
+            /* text와 선하고의 간격  left top right bottom*/
+            padding: 10px 5px; 
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+    <table >
+        <tr>
+            <td>1행 1열</td>
+            <td>1행 2열</td>
+            <td>1행 3열</td>
+        </tr>
+        <tr>
+            <td>2행 1열</td>
+            <td>2행 2열</td>
+            <td>2행 3열</td>
+        </tr>
+    </table>
+
+    <h1>테이블 행/열 병합하기</h1>
+    <table>
+         <tr>
+            <td rowspan="2">1행 1열</td>
+            <td>1행 2열</td>
+            <td>1행 3열</td>
+        </tr>
+        <tr>
+            <td>2행 2열</td>
+            <td>2행 3열</td>
+        </tr>
+    </table>
+
+    <hr/>
+      <table >
+        <tr>
+            <td colspan="3">1행 1열</td>
+        </tr>
+        <tr>
+            <td>2행 1열</td>
+            <td>2행 2열</td>
+            <td>2행 3열</td>
+        </tr>
+    </table>
+
+</body>
+</html>

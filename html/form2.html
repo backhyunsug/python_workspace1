@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- id 속성 모든 태그에 가능하다, 반드시 하나만 존재해야 한다
+                배열 절대 안됨 동일한 아이디가 2개이상 존재할 경우에 
+                자바스크립트로 접근할때 첫번째것만 접근가능하다 
+         name 속성 input태그류 , 서버로 정보 전송이 가능한 것들만 
+               배열이 가능하다. 서버로 정보 전송을 age1 으로 정보가 오고 어떤때는 age2 라는 이름으로 오면 
+               프로그램이 힘들다  age=1 or age=2 .... 
+    -->
+    <form action="">
+        <h1>연령대</h1>
+        <label for="age1">10대</label>
+        <input type="radio" name="age" value="1" id="age1"><br/>
+        <label for="age2">20대</label>
+        <input type="radio" name="age" value="2" id="age2"><br/>
+        <label for="age3">30대</label>
+        <input type="radio" name="age" value="3" id="age3"><br/>
+        <label for="age4">40대</label>
+        <input type="radio" name="age" value="4" id="age4"><br/>
+     
+
+        <h1>지원하고자 하는 직업</h1>
+        <label for="job1">데이터분석가</label>
+        <input type="checkbox" value='1' name="job" id="job1"> <br/>
+        <label for="job2">빅데이터전문가</label>
+        <input type="checkbox" value='2' name="job" id="job2"> <br/>
+        <label for="job3">웹개발자</label>
+        <input type="checkbox" value='3' name="job" id="job3"> <br/>
+        <label for="job4">기획자</label>
+        <input type="checkbox" value='4' name="job" id="job4"> <br/>
+
+        <br/>
+        <input type="submit" value="보내기"> 
+    </form>
+</body>
+</html>

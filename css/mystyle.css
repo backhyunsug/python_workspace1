@@ -1,0 +1,10 @@
+/* 확장자가 css 이것도 파일을 여러개 만들어서 import 시켜서 쓸 수 있다 */
+*{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    color:#222222 
+}
+body{
+    background-color: aliceblue;
+    margin: 10px 10px 10px 10px; /*left top right bottom 시계방향순*/
+}

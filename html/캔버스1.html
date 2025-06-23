@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 스케치북 -->
+    <canvas id="myCanvas" width="200" height="200" 
+    style="border:1px solid #000000;">
+    </canvas>
+
+<script>
+//1.그림전체에대한 객체를 가져온다
+// document : 파이썬의 self쯤? 현재 html문서를 자바스크립트에서 document라고 부른다
+// document.getElementById("태그의id값")  
+var c = document.getElementById("myCanvas"); 
+//변수앞에 var 또는 let밖에 안붙임, 안붙여도 아무말도 안함 
+
+//2.객체안에서 스케치북 콕 찝어서 context 
+var ctx = c.getContext("2d");
+ctx.moveTo(0, 0);
+ctx.lineTo(200, 200);
+ctx.stroke();
+</script>
+
+</body>
+</html>

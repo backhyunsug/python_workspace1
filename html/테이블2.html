@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table, tr,td, th{
+            border:1px solid lightgray;
+            border-collapse:collapse;
+        }
+        table{
+            width:60%;
+            margin-left: auto;
+            margin-right: auto;
+           
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <!-- 특정열한테 공통의 속성을 주고자 할때 -->
+        <colgroup>
+            <col style="width:10%">
+            <col style="width:40%">
+            <col style="width:10%">
+            <col style="width:40%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>용도</th>
+                <th>중량</th>
+                <th>개수</th>
+                <th>가격</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2">선물용</td>
+                <td>3kg</td>
+                <td>11~13과</td>
+                <td>3,5000원</td>
+            </tr>
+             <tr>
+                <td>3kg</td>
+                <td>11~13과</td>
+                <td>3,5000원</td>
+            </tr>
+            <tr>
+                <td rowspan="2">선물용</td>
+                <td>3kg</td>
+                <td>11~13과</td>
+                <td>3,5000원</td>
+            </tr>
+             <tr>
+                <td>3kg</td>
+                <td>11~13과</td>
+                <td>3,5000원</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

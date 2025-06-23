@@ -1,0 +1,95 @@
+form 태그 
+서버 - 서비스를 제공하는 측, 하드웨어일수도 소프트웨어일수도 있다
+클라이언트 - 서비스를 받는 측, 하드웨어일수도 소프트웨어일수도 있다
+
+서버용 컴퓨터일경우에는 hw 자체의 능력이 뛰어나다 
+개인 PC도 서버로 사용할 수 있다. 이때 접속할 수 있는 클라이언트가
+몇명 안된다.
+
+웹서버 - 클라이언트의 요청에서 의해서 정적웹페이지를 
+        찾아서 클라이언트에게 보내는 역할을 하는 프로그램 
+        정적웹페이지(html, css, javscript,이미지)
+        미리 문서를 다 만들어놓아야 한다 
+        회원가입,게시판등은-불가능
+        아파치, 웹투비, nginx 등이 있다   
+WAS(Web Application Server 와스) - 클라이언트가 보내는 
+        정보를 받아서 디비에 넣거나 또는 디비로부터 데이터를 
+        읽어서 새로운 html페이지를 만들어서 클라이언트에게 
+        전송한다. 
+web + was 총칭 웹서버라고 부르기도 한다 
+        파이썬은 별도의 was프로그램이 없고 내부에 파이썬 
+        자체가 was를 만들수 있는 라이브러리를 제공한다.
+        장고,플라스크, fastapi 등등 + nginx와 함께 배포
+웹클라이언트 - 브라우저 
+
+html - 보여지는 무서의 골격담당 
+form 태그 -> 사용자의 입력값을 서버로 전달한다. => 이 정보를 받는 거는 프로그래밍 언어 
+                                             java(jsp), c(php), python, nodejs, asp  
+하나의 html 페이지에 폼태그는 보통 하나만 둔다. 
+<form>
+......
+</form>
+
+<form>
+......
+</form>
+
+서버로 정보를 전송하는 방법이 크게 두가지가 있다 
+서버와 클라이언트간에 정보를 주고 받을때 우선 선발대가 간다. 
+head 정보와 구체적인 정보인 body로 나누어져서 간다.  
+1. get  
+head만 보낸다. 브라우저마다 다른다, 2048 byte 이내의 정보를 보낸다 
+누구나 이 정보를 볼수있어서 보안에 취약, 한글의 경우는 전송시 자기들 멋대로 문자를 
+바꿔서 전송을 한다. 인코딩 작업을 해서 보내야 안깨진다. 
+특정 웹페이지에 접근할 수 있는 정보가 url 다 드러난다. 
+링크를 보내면 바로 그 페이지로 이동이 가능하다 
+http://www.daum.net/news/enter/2025062001  
+http://www.daum.net?news=enter&id=2025062001  
+
+2.post
+head와 body가 간다. 
+로그온 http://www.daum.net/login.do?userid=littleconan&password=1234 
+이런 경우에는 get으로 보내면 안되고 
+post 방식으로 head http://www.daum.net/login.do
+            body  userid=littleconan 
+                  password=1234 
+무제한으로 보내는게 가능하지만, 파일첨부 20~30mb정도 
+파일전송이나 비교적 중요한정보들은 post방식으로 보낸다  
+
+form 태그의 주요 속성 
+    action = "" 서버에서 이 요청을 받아서 처리해야할 웹페이지 
+                아무것도 안주면 나를 도로 불러온다 
+    method = "get" 또는 "post" 
+                전송방식을 지정한다
+        
+input type="text"  한줄정보 보낼때 
+input type="password" 패스워드 보낼때  
+input type="radio" 한번에 하나만 선택가능 
+input type="checkbox" 한번에 여러개 선택가능 
+input type="reset"  form태그안에 있는 input태그에 입력된 값들을 전부 초기화한다
+input type="submit" 서버로 정보를 무조건 전송한다. 
+                   서버로 정보를 전송하기 전에 에러체크를 하려고 할때 불가능 
+                   보통은 테스트할때 죽어도 정보를 보내야 할때 
+input type="button"  클릭이벤트만 발생 
+textarea - 여러줄 보내고자 할때 
+select - 리스트 선택사항을 보내고자 할때 
+<input type="button" value="누르기">  <button type="button">누르기</button>
+<button>누르기</button>   input type="submit" 과 동일 
+
+태그에 접근해서 값을 읽고 쓰려면 3가지 속성이 있다 
+id, name, class 
+name 속성이 서버로 정보를 전송하는데 사용된다. id와 class는 서버와 관계없이 
+name속성이 키가 되고 
+value속성이 값이 되어 서버에 전달된다. 
+<input type="text" name="userid" value="littleconan"> 
+<input type="password" name="password" value="1234"> 
+
+userid=littleconan&password=1234 
+
+
+hidden 태그 - 정보를 숨겨서 서버로 보내길 원함 
+
+html 은 정보 저장을 못함
+a.html -> b.html 정보를 보내면 
+get이던 post이던 정보전달하면 끝 
+html페이지에 숨김 정보를 갖고 다니면서 써야할때가 있다

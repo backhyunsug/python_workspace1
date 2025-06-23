@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- inline style -->
+    <style>
+        /* css 주석 */  
+        /*selector - p태그 */ 
+        *{
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color:darkgray;
+        }
+        p{
+            text-align: center;
+            color:blue
+        }
+
+        /*뛰어쓰기 없이 해야 한다. p태그에 속한다.*/
+        p#para1{
+            text-align: right;
+            color:blueviolet
+        }
+
+        p.para2{
+            text-align: left;
+            padding:10px 10px 10px 10px;
+            background-color: darkgreen;
+            color:yellow
+        }
+
+    </style>
+    <script>
+        //주석 
+        /* 주석 */
+    </script>
+</head>
+<body>
+    <h1>school</h1>
+    <h1>python</h1>
+    <div>
+        I like star 
+    </div>
+    
+    <h1 id="para1">제목줄</h1>
+    <p>첫번째 문단입니다</p>
+    <p id="para1">두번째 문단입니다</p>
+    <p class="para2">세번째 문단입니다</p>
+    <p>네번째 문단입니다</p>
+    <p>다섯번째 문단입니다</p>
+</body>
+</html>

@@ -1,0 +1,63 @@
+from collections import defaultdict
+
+def solution(nodes, edges):
+    def find(x):
+        if parent[x] != x:
+            parent[x] = find(parent[x])
+        return parent[x]
+
+    def merge(a, b):
+        ra = find(a)
+        rb = find(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    class TreeInfo:
+        def __init__(self):
+            self.odd_node = 0
+            self.even_node = 0
+            self.reverse_odd_node = 0
+            self.reverse_even_node = 0
+
+        def is_tree(self):
+            return (self.odd_node == 1 and self.even_node == 0) or (self.odd_node == 0 and self.even_node == 1)
+
+        def is_reverse_tree(self):
+            return (self.reverse_odd_node == 1 and self.reverse_even_node == 0) or \
+                   (self.reverse_odd_node == 0 and self.reverse_even_node == 1)
+
+    last_node = max(nodes)
+    in_degree = [0] * (last_node + 1)
+    parent = [i for i in range(last_node + 1)]
+
+    for a, b in edges:
+        in_degree[a] += 1
+        in_degree[b] += 1
+        merge(a, b)
+
+    group_map = defaultdict(TreeInfo)
+
+    for node in nodes:
+        group = find(node)
+        t = group_map[group]
+
+        if node % 2 == 0 and in_degree[node] % 2 == 0:
+            t.even_node += 1
+        elif node % 2 == 1 and in_degree[node] % 2 == 1:
+            t.odd_node += 1
+        elif node % 2 == 0 and in_degree[node] % 2 == 1:
+            t.reverse_even_node += 1
+        elif node % 2 == 1 and in_degree[node] % 2 == 0:
+            t.reverse_odd_node += 1
+
+    tree_count = 0
+    reverse_tree_count = 0
+
+    for t in group_map.values():
+        if t.is_tree():
+            tree_count += 1
+        if t.is_reverse_tree():
+            reverse_tree_count += 1
+
+    return [tree_count, reverse_tree_count]
+"""https://blogshine.tistory.com/701"""

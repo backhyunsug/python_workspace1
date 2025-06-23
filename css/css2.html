@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="mystyle.css">
+    <style>
+        h1{
+            font-size:36pt;
+            font-family:굴림체;
+            /* 굴림-반각문자, 글씨의 원래의 자연스런 모양에 따라 크기가 결정 
+               글자마다 크기가 다르다 , 
+               굴림체-전각문자. 글자크기를 동일하게, 웹, 
+               @굴림-세로로 */
+        }
+
+        div {
+            width:200px;
+            height:200px;
+            display:inline-block;
+            background-color: green;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <h1>외부파일사용하기</h1>
+    <h1 style="color:deeppink">인라인스타일</h1>
+
+    <div></div>
+    <div style="opacity: 0.6;"></div>
+    <div style="opacity: 0.9;"></div>
+    
+    <div style="background-image: url('../html/images/bg4.jpg');"></div>
+</body>
+</html>
