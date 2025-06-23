@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img src="../html/images/bg4.jpg" alt="" style="display:none"
+    id="image1"><br/>
+    <button id="btnShow" type="button">보이기</button>
+    <button id="btnHide" type="button">감추기</button>
+</body>
+</html>
+<script>
+    document.getElementById("btnShow").addEventListener("click", 
+        function(){
+            document.getElementById("image1").style.display="block";
+        }
+    );
+
+    document.getElementById("btnHide").addEventListener("click", 
+        function(){
+            document.getElementById("image1").style.display="none";
+        }
+    )
+</script>
