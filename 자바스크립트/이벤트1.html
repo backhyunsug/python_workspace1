@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>이벤트핸들러</h1>
+    <p>컴퓨터에서 이뤄지는 모든 동작들은 이벤트라고 한다. 마우스를 클릭한다던가
+        드레그를 하거나 키보드를 누르는 모든 동작을 이벤트라고 한다. 이 이벤트가 
+        발생할 경우에 어떤 동작을 수행하게 하려고 할때 각 이벤트에 함수를 연결
+        한다. 이를 이벤트 핸들러라고 한다. 
+    </p>
+    <!-- 옛날 방식 -->
+    <button type="button" onclick="goClick()">이벤트1</button> 
+    <button type="button" id="btnPress">이벤트2</button> 
+    
+    <script>
+        //함수선언문형식
+        function goClick(){
+            alert("이벤트1");
+        }
+
+        //document.getElementById html태그 객체를 가져온다 
+        let btnPress = document.getElementById('btnPress');
+        //함수표현식 또는 람다 
+        btnPress.addEventListener("click", function(){
+            alert("이벤트 222222222222222222");
+        }); 
+
+
+    </script>
+</body>
+</html>
