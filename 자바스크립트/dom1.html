@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="title1">제목줄1</h1>
+    <h1 id="title2">제목줄2</h1>
+    <h1 id="title3">제목줄3</h1>
+    
+    <script>
+        //자바스크립트로 dom 트리에 접근하기 
+        //id는 하나의 페이지에 반드시 하나만 존재해야 한다 
+        //혹시나 두개 쓰면 자바스크립트가 2번째부터는 접근 불가 
+        h1 = document.getElementById("title1");
+        //일반태그의 경우에는 innerHTML 속성에 값을 읽고 쓴다 
+        h1.innerHTML="쌍갑포차";
+        h2 = document.querySelector("#title2");//최근에 나온 문법 
+        h2.innerHTML="아지갑놓고나왔다";
+        document.getElementById("title3").innerHTML=
+            "<span style='color:red;'>뽀짜툰</span>";
+
+        //배열을써서 for문으로 해결하고 싶다
+        titles = ["",
+            "네개의서명", 
+            "<span style='color:blue'>그리고아무도없었다</span>",
+            "쥐덫"
+        ];
+
+        for(i=1; i<=3; i++){
+            document.getElementById("title"+i).innerHTML=titles[i];
+        }
+    </script>
+</body>
+</html>

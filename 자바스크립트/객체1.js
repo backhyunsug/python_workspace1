@@ -27,11 +27,6 @@ key="B";
 students.filter( item=> item.name == key)
         .forEach( item=> console.log(item));
 
-//문제2. reduce 사용해서 학생들 전체 평균구하기 
-
-// s = arr.reduce( (pre, initvalue)=>{
-//     return pre+initvalue;
-// });
 
 
 

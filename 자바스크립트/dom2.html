@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    x : <input type="text" name="" id="x"> <br/>
+    y: <input type="text" name="" id="y"> <br/>
+    <div style="border:1px solid red;width:100px;height:50px" id="result"></div>
+    <button type="button" id="btnAdd">더하기</button>
+    
+    <script>
+        let btnAdd = document.querySelector("#btnAdd");
+        //button에 클릭이벤트가 발생하면 전달된 람다를 호출한다 
+        btnAdd.addEventListener("click", ()=>{
+            x = document.querySelector("#x").value;
+            y = document.querySelector("#y").value;
+
+            document.querySelector("#result").innerHTML=eval(x)+eval(y);
+        });
+    </script>
+</body>
+</html>
