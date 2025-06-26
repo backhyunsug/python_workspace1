@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" onkeypress="goNumber()">
+
+    <input type="text" oninput="goNumber2(this)">
+    <script>
+        function goNumber(){
+            //사건이 발생하면 발생한 사건에 대한 정보를 저장하는 객체가 있음 
+            console.log( event ); 
+            if (event.keyCode<48 || event.keyCode>57)
+                event.returnValue=false; //여기에 해당하는 키들은 화면출력을 막는다
+        }
+        function goNumber2(me){
+            //replace(정규식, '')   /[^0-9]/ /패턴/g g가 전체 
+            me.value=me.value.replace(/[^0-9]/g, '' ); //0~9를 제외한 모든 문자는 공백으로
+        }
+    </script>
+</body>
+</html> 

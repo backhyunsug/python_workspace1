@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <input type="text" name="product" id="product">
+    <button id="btnAdd">추가</button>
+    <button id="btnDel">삭제</button>
+
+    <ul id="coffee">
+        <li>카카오</li>
+    </ul>
+</body>
+</html>
+
+<script>
+window.onload=function(){
+    document.getElementById("btnAdd").addEventListener("click", funAdd);
+    document.getElementById("btnDel").addEventListener("click", funDel);
+}
+
+function funAdd(){
+    var coffee=document.getElementById("coffee");
+    var child = document.createElement("li"); //새로운 항목 추가
+    child.innerHTML = document.getElementById("product").value;
+    coffee.appendChild(child);   
+}
+function funDel(){
+    var coffee=document.getElementById("coffee");
+    console.log(coffee.children.length );
+    if (coffee.children.length>1)
+        coffee.removeChild(coffee.lastChild);
+    else
+        alert('더 이상 삭제 불가');
+}
+</script>
+

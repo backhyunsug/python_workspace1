@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button id="btnAdd">추가</button>
+    <button id="btnDel">삭제</button>
+
+    <table style="width:70%">
+        <thead>
+            <th>품목</th>  
+            <th>수량</th>  
+            <th>단가</th>
+        </thead>
+        <tbody id="tbody">
+            <tr>
+                <td><input type="text" name="product_name" id=""></td>
+                <td><input type="text" name="product_price" id=""></td>
+                <td><input type="text" name="product_count" id=""></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
+<script>
+window.onload=function(){
+    document.getElementById("btnAdd").addEventListener("click", funAdd);
+    document.getElementById("btnDel").addEventListener("click", funDel);
+}
+
+function funAdd(){
+    var tbody = document.getElementById("tbody");
+    var row = tbody.insertRow( tbody.rows.length ); // 하단에 추가
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    cell1.innerHTML='<input type="text" name="product_name" id="">';
+    cell2.innerHTML='<input type="text" name="product_price" id="">';
+    cell3.innerHTML='<input type="text" name="product_count" id="">';
+}
+
+function funDel(){
+    var tbody = document.getElementById("tbody");
+    if (tbody.rows.length>1)
+        tbody.deleteRow( tbody.rows.length-1 ); // 맨 마지막꺼 삭제
+    else
+        alert('더 이상 삭제 불가');
+}
+</script>
+

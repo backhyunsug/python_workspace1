@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>성적처리</h1>
+    이름:<input type="text" name="" id="name"><br/>
+    국어:<input type="text" name="" id="kor"><br/>
+    영어:<input type="text" name="" id="eng"><br/>
+    수학:<input type="text" name="" id="mat"><br/>
+    <div style="border: 1px solid black ; width: 100px; height: 50px;" id="result"></div>
+    <button type="button" id="btnAdd">확인</button>
+    <script>
+        let btnAdd =document.querySelector("#btnAdd");
+        btnAdd.addEventListener("click",()=>{
+            name=document.querySelector('#name').value;
+            kor=document.querySelector('#kor').value;
+            eng=document.querySelector('#eng').value;
+            mat=document.querySelector('#mat').value;
+            document.querySelector('#result').innerHTML=
+             `${name}의 총점은 ${parseInt(kor)+parseInt(eng)+parseInt(mat)} 입니다`;
+        })
+    </script>
+</body>
+</html>

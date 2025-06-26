@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>품목</th>
+            <th>수량</th>
+            <th>가격</th>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+
+    <script>
+        let data=[
+            {name:"새우깡", count:10, price:2000},
+            {name:"감자깡", count:20, price:2500},
+            {name:"자갈치", count:30, price:5000},
+            {name:"에이스", count:40, price:7000},
+            {name:"맛동산", count:50, price:8000}                
+        ]
+        
+        function load(){
+            tbody = document.querySelector("#tbody");
+            data.forEach( item=>{
+                row = tbody.insertRow( tbody.rows.length );
+                cell1 = row.insertCell(0);
+                cell2 = row.insertCell(1);
+                cell3 = row.insertCell(2);
+                cell1.innerHTML = item.name;
+                cell2.innerHTML = item.count;
+                cell3.innerHTML = item.price;
+            })
+        }
+        window.onload=()=>{
+            load();
+
+        
+            fetch('https://jsonplaceholder.typicode.com/todos/1')
+            .then(response => response.json())
+            .then(json => console.log(json))
+        }
+
+    </script>
+
+</body>
+</html>

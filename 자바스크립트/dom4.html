@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+ 
+</head>
+<body>
+    <h1 class="title">제목1</h1>
+    <h1 class="title">제목1</h1>
+    <h1 class="title">제목1</h1>
+    <h1 class="title">제목1</h1>
+    <button type="button"  id="btnClass">클래스</button><br/>
+    <button type="button"  id="btnTag">태그</button><br/>
+    <button type="button"  id="btnQuery">querySelectorAll</button><br/>
+
+
+    <script>
+        //dom트리가 완성된 이후에 - 태그들이 메모리에 올라와서 개체로 다 전환되고 
+        //난 이후에 onload이벤트가 발생한다. 
+        window.onload= function(){
+            btnClass = document.getElementById("btnClass");
+            btnClass.addEventListener("click", ()=>{
+                //alert("click");
+                title = document.getElementsByClassName("title");
+                title[0].style.color='red';
+                title[1].style.color='green';
+                title[2].style.color='blue';
+            });
+            
+            btnTag = document.getElementById("btnTag");
+            btnTag.addEventListener( "click", ()=>{
+                h1 = document.getElementsByTagName("h1");
+                h1[0].innerHTML="파이썬";
+                h1[1].innerHTML="넘파이";
+                h1[2].innerHTML="머신러닝";
+                h1[3].innerHTML="딥러닝";
+            });
+
+            btnQuery = document.querySelector("#btnQuery");
+            btnQuery.addEventListener("click", ()=>{
+                h1 = document.querySelectorAll(".title");
+                //background-color:스네이크표기법
+                //자바스크립트에서는 변수에 - (하이픈) 사용불가 
+                //backgroundColor :카멜표기법으로 바뀐다.  
+                h1[0].style.backgroundColor = "#aaaaaa";
+                h1[1].style.backgroundColor = "#00aaaa";
+                h1[2].style.backgroundColor = "#aaaacc";
+                h1[3].style.backgroundColor = "#aaddaa";
+            });
+        }
+        //console.log( btnClass );
+    </script>
+
+</body>
+</html>
+
