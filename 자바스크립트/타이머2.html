@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="clock"></h1>
+    <button type="button" id="btnCall">종료</button>
+
+    <script>
+        window.onload=()=>{
+            //반환값을 받아놔야 종료를 시킬 수 있다
+            let timer1 = setInterval(()=>{
+                today = new Date(); //오늘 날짜 알아내기
+                document.querySelector("#clock").innerHTML=
+                     today.toLocaleTimeString(); 
+                //컴퓨터의 시계가 1970년 1월 1일 0시부터 1초당 1씩 가산됨 
+            }, 1000);
+
+            btnCall = document.querySelector("#btnCall");
+            btnCall.addEventListener("click", ()=>{
+                clearInterval(timer1);
+            })
+        }
+    </script>
+</body>
+</html>

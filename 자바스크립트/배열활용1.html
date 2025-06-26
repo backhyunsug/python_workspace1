@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" name="numbers" id="numbers1" value="1"> <br/>
+    <input type="text" name="numbers" id="numbers2" value="2"> <br/>
+    <input type="text" name="numbers" id="numbers3" value="3"> <br/>
+    <input type="text" name="numbers" id="numbers4" value="4"> <br/>
+    <input type="text" name="numbers" id="numbers5" value="5"> <br/>
+    <input type="text" name="numbers" id="numbers6" value="6"> <br/>
+    <input type="text" name="numbers" id="numbers7" value="7"> <br/>
+    <input type="text" name="numbers" id="numbers8" value="8"> <br/>
+    <input type="text" name="numbers" id="numbers9" value="9"> <br/>
+    <input type="text" name="numbers" id="numbers10" value="10"> <br/>
+    <div id="result"></div>
+    <button type="button" id="btnAdd1">더하기1(name접근)</button>
+    <button type="button" id="btnAdd2">더하기2(id접근)</button>
+    <script>
+        window.onload=()=>{
+            let btnAdd1 = document.querySelector("#btnAdd1");
+            btnAdd1.addEventListener("click", ()=>{
+                let numbers = document.getElementsByName("numbers");
+                s=0;
+                numbers.forEach(item=> s=s+parseInt(item.value));
+                document.querySelector("#result").innerHTML=s;  
+            })
+
+            let btnAdd2 = document.querySelector("#btnAdd2");
+            btnAdd2.addEventListener("click", ()=>{
+              
+                s=0;
+                for(i=1; i<=10; i++)
+                {
+                    s += parseInt(document.getElementById("numbers"+i).value);
+                }
+                document.querySelector("#result").innerHTML=s;  
+            })
+        }
+    </script>
+</body>
+</html>
