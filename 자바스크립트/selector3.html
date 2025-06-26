@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>파랗게</h1>
+    <p id="p1">전체를 파랗게 파랗게 랗게</p>
+</body>
+</html>
+
+<script>
+    $(function(){
+        
+        $("#p1").hover(()=>{
+            console.log("You entered p1!");
+        },
+        ()=>{
+            console.log("Bye! You now leave p1!");
+        }); 
+
+    })
+</script>
+

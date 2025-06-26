@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <p>이 문장 앞에 새로운 문자열을 추가한다</p>
+    <p>이 문장 앞에도 </p>
+
+    <ol>
+        <li>목록1</li>
+        <li>목록2</li>
+        <li>목록3</li>
+    </ol>
+
+<button id="btn1">문장추가하기</button>
+<button id="btn2">목록 추가하기</button>
+
+<button id="btn3">뒤쪽에 문장추가하기</button>
+<button id="btn4">뒤쪽에 목록 추가하기</button>
+
+</body>
+</html>
+<script>
+    $(()=>{
+        $("#btn1").click(function(){
+            $("p").prepend("<b>제목:</b>. ");
+        });
+
+        $("#btn2").click(function(){
+            $("ol").prepend("<li>첫목록</li>");
+        });
+
+        $("#btn3").click(function(){
+            $("p").append("<b>:마무리</b>. ");
+        });
+
+        $("#btn4").click(function(){
+            $("ol").append("<li>마지막목록</li>");
+        });
+
+    })
+</script>

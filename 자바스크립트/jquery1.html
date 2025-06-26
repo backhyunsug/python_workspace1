@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<script>
+    $(document).ready(function(){
+        //이벤트 핸들러를 이 위치에서 처리한다. 
+        //문서가 모두 로딩된 후 이 부분이 호출된다. window.onload와 같은 역할 
+        $("p").click( function(){
+            alert('눌림');
+        })
+    });
+
+</script>
+<body>
+    <p>누르세요</p>
+</body>
+</html>
+
+

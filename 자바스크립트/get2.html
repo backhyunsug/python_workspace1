@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <input type="text" id="userid"> 
+    <button>읽기</button>
+</body>
+</html>
+<script>
+    $(()=>{
+        $("#userid").val("userid");//값 넣기 
+
+        $("button").click( ()=>{
+            alert($("#userid").val());           
+        });
+    })
+</script>

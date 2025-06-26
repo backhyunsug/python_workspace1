@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+    x : <input type="text" name="" id="xvalue"><br/>
+    y : <input type="text" name="" id="yvalue"><br/>
+    
+    <button type="button" id="btnAdd" class="button">더하기</button> <br>
+    <button type="button" id="btnSub" class="button">빼기</button> <br>
+    <button type="button" id="btnMul" class="button">곱하기</button> <br>
+    <button type="button" id="btnDiv" class="button">나누기</button> <br>
+
+    <div id="result"></div>
+    
+</body>
+</html>
+
+<script>
+    $(()=>{
+        $("#btnAdd").click( ()=>{
+            console.log( parseInt($("#xvalue").val()) + parseInt($("#yvalue").val()));
+        } );
+
+        //여러개가 한꺼번에 올때 event 
+        $(".button").click( (event)=>{
+            console.log( event.target.id );
+            if(event.target.id=="btnAdd"){
+                console.log( parseInt($("#xvalue").val()) + parseInt($("#yvalue").val()));
+            }
+            else if(event.target.id=="btnSub"){
+                console.log( parseInt($("#xvalue").val()) - parseInt($("#yvalue").val()));
+            }
+            else if(event.target.id=="btnMul"){
+                console.log( parseInt($("#xvalue").val()) *parseInt($("#yvalue").val()));
+            }
+            else{
+                console.log( parseInt($("#xvalue").val()) / parseInt($("#yvalue").val()));
+            }
+
+        });
+    } )
+</script>

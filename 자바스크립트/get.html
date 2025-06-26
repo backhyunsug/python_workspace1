@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="div1">파랗게</div>
+    <div id="div2">주마등</div>
+
+    <h1 id="h1">타이틀</h1>
+    <p id="p1">p태그</p>
+
+    <button id="btn1">내용 읽어오기</button>
+    <button id="btn2">내용 바꾸기</button>
+</body>
+</html>
+<script>
+    $(()=>{
+        $("#btn1").click( ()=>{
+            let a = $("#div1").html();
+            let b = $("#div2").html();
+            console.log(a);
+            console.log(b);
+
+            console.log( $("#h1").html());
+            console.log( $("#h1").val());
+            
+            console.log( $("#h2").html());
+            console.log( $("#h2").val());
+
+            console.log( $("#p1").html());
+            console.log( $("#p1").val());
+            
+            
+        });
+
+        $("#btn2").click( ()=>{
+            $("#div1").html("와이키키");
+            $("#div2").html("액시던트");
+
+            $("#h1").html("제목을 바꿔봅시다");
+            $("#p1").html("내용도 바꿔봅시다");
+            
+        });
+    })
+</script>

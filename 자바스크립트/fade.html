@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <p>페이드인/페이드아웃</p>
+    <button id="btnFadeIn">fade in</button> <button id="btnFadeOut">fade out</button>
+    <br><br>
+    <div id="div1" style="width:80px;height:80px;display:none;background-color:red;"></div><br>
+    <div id="div2" style="width:80px;height:80px;display:none;background-color:green;"></div><br>
+    <div id="div3" style="width:80px;height:80px;display:none;background-color:blue;"></div>
+</body>
+</html>
+
+<script>
+    $(function(){
+        $("#btnFadeIn").click(function(){
+            $("#div1").fadeIn();
+            $("#div2").fadeIn("slow");
+            $("#div3").fadeIn(3000);
+        });
+        $("#btnFadeOut").click(function(){
+            $("#div1").fadeOut();
+            $("#div2").fadeOut("slow");
+            /*$("#div3").fadeOut(3000, function(){
+                alert("모두 사라짐");
+            }); //모두 사라지면 alert창을 띄우거나 기타 어떤 작업이 필요할때 
+            */
+            $("#div3").fadeOut(3000)
+            .fadeIn(3000);
+        });
+    })
+</script>
+

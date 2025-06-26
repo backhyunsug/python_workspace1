@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <form id="form" name="form">
+        관심분야<br><br>
+        <input type="checkbox" name="interest"  id="interest1" value="1">프로그래밍 <br>
+        <input type="checkbox" name="interest"  id="interest2" value="2">웹프로그래밍 <br>
+        <input type="checkbox" name="interest"  id="interest3" value="3">Database <br>
+        <input type="checkbox" name="interest"  id="interest4" value="4">빅데이터 <br>
+        <input type="checkbox" name="interest"  id="interest5" value="5">인공지능 <br><br>
+
+        <button id="btnSel">전체선택</button> <button id="btnRelese">전체해제</button>
+    </form>
+</body>
+</html>
+<script>
+    $(()=>{
+       $("#btnSel").click( ()=>{
+            event.preventDefault(); //submit 기능 막기 
+            $("input[type=checkbox][name=interest]").prop('checked', true) ;
+            $("input[type=checkbox][name=interest]").attr('checked', true) ;
+       });
+  
+       $("#btnRelese").click( ()=>{
+            event.preventDefault();
+            $("input[type=checkbox][name=interest]").prop('checked', false) ;
+            $("input[type=checkbox][name=interest]").attr('checked', false) ;
+       });
+    });
+</script>
+
+
+<!-- - 전체 선택하기
+$("#chkBox").prop('checked', true) ;
+$("#chkBox").attr('checked', true) ;
+
+
+- 전체 해제하기
+
+
+4. 체크된 체크박스 value 가져오기
+
+$('#chkBox:checked').each(function() {
+        alert($(this).val());
+});
+-->

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <h2>input 배열 사용하기</h2>
+    <input type="text" name="numbers" value="1"><br>
+    <input type="text" name="numbers" value="2"><br>
+    <input type="text" name="numbers" value="3"><br>
+    <input type="text" name="numbers" value="4"><br>
+    <input type="text" name="numbers" value="5"><br>
+    <input type="text" name="numbers" value="6"><br>
+    <input type="text" name="numbers" value="7"><br>
+    <input type="text" name="numbers" value="8"><br>
+    <input type="text" name="numbers" value="9"><br>
+    <input type="text" name="numbers" value="10"><br>
+    <div id="result" style="background-color: lightgray;width:170px;height:20px"></div>
+    <button type="button" id="btnCalc"]>합산하기</button>
+</body>
+</html>
+
+<script>
+$( ()=>{
+    $("#btnCalc").click( ()=>{
+        var obj = $("input[type=text][name=numbers]");
+        console.log( obj );
+
+        for(i=0; i<obj.length; i++){
+            obj.eq(i).val( (i+1)*10 );
+        }
+
+        var result=0;
+        for(i=0; i<obj.length; i++){
+            console.log( obj.eq(i).val() );
+            result = result + parseInt(obj.eq(i).val());
+        }
+
+        console.log("결과 ", result);
+    });
+
+} );
+</script>

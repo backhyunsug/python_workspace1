@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+   <button id="button">한번 누르면 사라지고 또 누르면 나타납니다.</button>
+   <p>파랗게</p>
+   <p>주마등</p>
+</body>
+</html>
+
+<script>
+    $(function(){
+        $("button").click(function(){
+            $("p").toggle();
+        });
+    })
+</script>
+
