@@ -43,6 +43,7 @@ data['disp'].replace('?', np.nan, inplace=True)
 print(data.head())
 
 data.dropna(subset=['disp'], axis=0, inplace=True)
+
 print(data.head())
 print(data.dtypes)
 data['disp'] = data['disp'].astype('float')
@@ -59,12 +60,62 @@ print(data.dtypes)
 #판다스 2.0에서 지원안함
 #data = data.append({'mpg':90, 'model':93}, ignore_index=True)
 #판다스 2.0 부터 
-data.loc[len(data)] = {'mpg':90, 'model':93}
+#data.loc[len(data)] = {'mpg':90, 'model':93}
 #모델타입이 카테코리라서 없는 카테고리 값을 추가할 경우에 오류가 발생한다 
 #파일을 읽을때 범위가 결정되어서 93이 해당사항이 없어서 에러가 발생한다 
 
 #반드시 범주형으로 되어야 할것들은 범주형으로 바꿔줘야 한다 
 print(data.dtypes)
 print( data['model'].value_counts())#빈도표, 범주형의 경우에는 엄청 중요하다 
+
+import numpy as np 
+#구간나누기 코딩 
+#bins = 나눠야할 구간의 개수 
+#구간을 나누어서 각 구간별 데이터 개수와 구간에 대한 정보를 반환한다 
+
+#NaN값이 있을 경우에 구간나누기를 할 수 없다. 
+#np.histogram는 구간정보만 준다
+#
+data.dropna(subset=['power'], axis=0, inplace=True)
+count, bin_dividers = np.histogram(data['power'], bins=4)
+print("각 구간별 데이터 개수 : ", count)
+print("구간정보 : ", bin_dividers)
+
+bin_dividers=np.array([40, 120, 140, 200, 300]) #직접부여가능 
+bin_names = ["D", "C", "B", "A"]
+data["grade"] = pd.cut(x=data['power'], 
+                       bins = bin_dividers
+                       ,labels=bin_names, 
+                       include_lowest=True)
+print(data[:20])
+print(data["grade"].value_counts())
+
+
+#원핫인코딩 -사이킷런 (pip install scikit-learn)
+#사이킷런 의 모든 모델은 입력값이 2차원이어야 한다. 무조건 ndarray,numpy2차원배열
+#2d형식이어야 한다 
+grade = data['grade']
+print(type(grade))
+#2d형식으로 바꿔야 한다. 
+Y_class = np.array(grade) #1d array 
+print(Y_class[:5]) #1d타입으로 
+Y_class = Y_class.reshape(-1, 1) #축이 하나 추가되어서 2d type이 된다.
+print(Y_class[:5])
+from sklearn.preprocessing import OneHotEncoder
+enc = OneHotEncoder() #객체 만들고 
+enc.fit(Y_class) 
+#내부적으로 저 배열을 읽어들여서 어떻게 변형할지에 대한 정보가 내부에 저장됨
+Y_class_onehot = enc.transform(Y_class).toarray() 
+print(Y_class_onehot)
+
+
+
+
+
+
+
+
+
+
 
 
