@@ -25,3 +25,8 @@ ts = pd.Series( np.random.randn(12),
 #12개의 가짜 데이터를 만들었음 
 #날짜가 인덱스임 
 
+#resample 연산
+ts = pd.Series(np.random.randn(100), index=pd.date_range("2025-07-04", periods=100, freq="D"))
+print(ts.tail(20))  #마지막 20개만 출력
+
+print(ts.resample('W').mean()) #D(일일) -> W(주)형식으로 전환
