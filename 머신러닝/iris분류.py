@@ -46,17 +46,17 @@ print(X_test.shape)
 #scatter_matrix 차트가 직접 노가다로 그릴수도 있고 DataFrame이 제공해준다. 아니면 Seaboarn차트를 사용하거나 
 #numpy 배열을 => DataFrame으로 바꾼다
 import pandas as pd 
-iris_df = pd.DataFrame(X, columns=data['feature_names']) #numpy배열과 컬러명으로 
-import matplotlib.pyplot as plt #모든 차트는  matplotlib.pyplot  가 필요하다 
+# iris_df = pd.DataFrame(X, columns=data['feature_names']) #numpy배열과 컬러명으로 
+# import matplotlib.pyplot as plt #모든 차트는  matplotlib.pyplot  가 필요하다 
 
-pd.plotting.scatter_matrix( iris_df, 
-                    c=y, #각 점의 색상을 지정한다. 0,1,2 각자 다른색 지정
-                    figsize=(15,15),  #차트크기 단위는 inch임 
-                    marker='o', 
-                    hist_kwds={'bins':20}, #대각선의 히스토그램의 구간 개수 
-                    s=60, #점의 크기 
-                    alpha=0.8  #투명도 1이 불투명, 0으로 갈수록 투명하다 
-)
+# pd.plotting.scatter_matrix( iris_df, 
+#                     c=y, #각 점의 색상을 지정한다. 0,1,2 각자 다른색 지정
+#                     figsize=(15,15),  #차트크기 단위는 inch임 
+#                     marker='o', 
+#                     hist_kwds={'bins':20}, #대각선의 히스토그램의 구간 개수 
+#                     s=60, #점의 크기 
+#                     alpha=0.8  #투명도 1이 불투명, 0으로 갈수록 투명하다 
+# )
 #plt.show()
 
 #Knn이웃알고리즘 : 내옆집에 누가 사느냐를 확인하는것 , 거리로 가장 가까운 거리에 누가 있느냐 
@@ -86,6 +86,56 @@ print("테스트셋평가", model.score(X_test, y_test))
 #     print("예측 :{:20s} 실제:{:20s}".format(class_names[i], class_names[j]))
 
 
+#로지스틱 분류 : 2진, 다중분류, R은 2진분류만 
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression() 
+model.fit(X_train, y_train) 
+print("로지스틱일때")
+print("훈련셋평가", model.score(X_train, y_train))
+print("테스트셋평가", model.score(X_test, y_test))
+print(model.coef_)
+print(model.intercept_)
 
+#의사결정트리 (회귀와 분류 모두 가능하다 )
+#필연적으로 과대적합이 된다. 알고리즘 자체가 과대적합으로 간다 
+#의사결정트리 알고리즘은 특성의 중요도 파악용임 
+from sklearn.tree import DecisionTreeClassifier
+#트리시작이 랜덤이라서 , 시드를 잡아주지 않으면 만들어질때마다 다르게 나온다 
+model = DecisionTreeClassifier(random_state=1)
+model.fit(X_train, y_train)
+print("의사결정트리")
+print("훈련셋평가", model.score(X_train, y_train))
+print("테스트셋평가", model.score(X_test, y_test))
+print("특성의 중요도 ", model.feature_importances_) #특정의 중요도 
 
+#수평막대 차트를 그려보자 : 중요도를 그려보자 
+import matplotlib.pyplot as plt
+import numpy as np  
+def treeChart(model, feature_name):
+    #수평막대개수 구하기 : 특성의 개수만큼 구하면 된다. 
+    n_features = len(model.feature_importances_)
+    #barh - 수형막대그래프 
+    plt.barh(np.arange(n_features), model.feature_importances_ ,
+             align="center")
+    plt.yticks(np.arange(n_features), feature_name)#y축 단위 
+    plt.ylim(-1, n_features) #눈금 범위 
+    plt.show() 
 
+treeChart(model, np.array(data['feature_names']))
+
+#랜덤포레스트 : 의사결정트리를 랜덤하게 많이 만들어서 평균값 따져서 예측하는 
+#             앙상블의 일종, 과대적합의 위험을 갖고 있다
+from sklearn.ensemble import RandomForestClassifier
+#random_state 꼭 지정해줘야 한다  
+#max_depth : 트리의 깊이를 막자 
+#n_estimators : 결정트리를 몇개까지 만들까 너무 크면 시간이 많이 걸린다. 
+#너무 작으면 과대적합문제가 발생한다. 일반화 
+#모델을 생성할때 전달되는 파라미터를 하이퍼파라미터라고 하고 이 값들을 적절히 활용해서 과대적합도 과소적합도 
+#막아서 일반화를 해야 한다. 
+model = RandomForestClassifier( random_state=0, 
+                              max_depth=3, 
+                              n_estimators=1000)
+model.fit(X_train, y_train)
+print("랜덤포레스트=====================================")
+print("훈련셋평가", model.score(X_train, y_train))
+print("테스트셋평가", model.score(X_test, y_test))

@@ -92,5 +92,12 @@ plt.show()
 
 
 
-
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression() 
+model.fit(X_train, y_train) 
+print("로지스틱일때")
+print("훈련셋평가", model.score(X_train, y_train))
+print("테스트셋평가", model.score(X_test, y_test))
+print(model.coef_)
+print(model.intercept_)
 
