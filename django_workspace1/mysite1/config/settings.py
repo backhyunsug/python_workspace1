@@ -45,11 +45,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
+#해킹 csrf :정상적으로 사용자가 로그인을 해놓고 로그아웃 안하고 감 
+#이걸 가지고 다른 사이트로 납치해서 해킹하는 방법 
+#postman 프로그램에서 csrf값이 없다고 안받아준다 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    #"django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",

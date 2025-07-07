@@ -6,7 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/blog/blog_write" method="post">
+    <!-- blog/write 로 접근할때 get방식으로 전달할때 내부에서 토큰을 만들어서 
+     html에  전달되면 이걸 저장하려고 할때 다시 보내줘야 한다.  -->
+    <form action="/blog/save" method="post">
+        {%csrf_token%}
         제목 : <input type="text" name="title" id="title"><br/>
         작성자 : <input type="text" name="writer" id="writer"><br/>
         내용 : <textarea name="contents" rows="10" cols="80"></textarea><br/>
