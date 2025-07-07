@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form name="myform" id="myform" 
+               action="/guestbook/add_save" method="post">
+        {%csrf_token%}
+        x : <input type="text" name="x" id="x"> <br/>
+        y : <input type="text" name="y" id="y"> <br/>
+        <select name="opcode" id="opcode">
+            <option value="">선택하세요</option>
+            <option value="1">+</option>
+            <option value="2">-</option>
+            <option value="3">*</option>
+            <option value="4">/</option>
+        </select><br/>
+        <button type="button" id="btnSend">보내기</button>
+    </form>
+
+    <script>
+        window.onload = ()=>{
+            btnSend = document.querySelector("#btnSend");
+            btnSend.addEventListener("click", ()=>{
+                x = document.querySelector("#x").value;
+                //쓸데없는 좌우공백을 제거한다 
+                if( x.trim() ==""){
+                    alert("x 값을 입력하세요");
+                    document.querySelector("#x").focus();
+                    return false; 
+                }
+
+                //폼개체를 가져와서 폼객체를 통해접근가능하다
+                var frm = document.myform;  //도큐먼트.폼이름 
+                                            //document.forms[0]
+                if( frm.y.value.trim()=="")
+                {
+                    alert("y값을 입력하세요");
+                    frm.y.focus();
+                    return false;
+                }   
+                
+                if( frm.opcode.value.trim()=="")
+                {
+                    alert("연산자를 선택하세요");
+                    frm.opcode.focus();
+                    return false;
+                }       
+
+                frm.action="/guestbook/add_save";
+                frm.method="post";
+                frm.submit(); //서버로 전송하기 
+            })
+        }
+    </script>
+</body>
+</html>

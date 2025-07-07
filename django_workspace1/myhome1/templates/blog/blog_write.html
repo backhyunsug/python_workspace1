@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form name="form" action="/blog/save" method="post">
+          {%csrf_token%}
+          <!-- title : BlogForm 클래스 meta 항목에 있는 fields에 존재-->
+          제목 : <input type="text" name="title" id=""> <br/> 
+          작성자 : <input type="text" name="writer" id=""> <br/> 
+          내용 : <input type="text" name="contents" id=""> <br/> 
+          
+          <button>등록</button>
+    </form>
+</body>
+</html>
