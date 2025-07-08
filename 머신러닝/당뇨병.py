@@ -51,8 +51,67 @@ print("=== Lasso Model ===")
 print("훈련셋", model.score(X_train, y_train))
 print("테스트셋", model.score(X_test, y_test))
 
+#의사결정트리 -> 회귀 가능, 트리계열은 언제나 과대적합상태임  
+from sklearn.tree import DecisionTreeRegressor
+model = DecisionTreeRegressor()
+model.fit(X_train, y_train) #학습을하고
+y_pred = model.predict(X_test)
+#선형회귀모델의 score함수 썼을때 결정계수 1이면 완벽하게 예측을 한거고 
+#0이면 거의 예측불가 - 인 경우가 있는데 심각하게 안맞는 상태 
+print("=== DecisionTreeRegressor Model ===")
+print("훈련셋", model.score(X_train, y_train))
+print("테스트셋", model.score(X_test, y_test)) #회귀분석에서 score 가 결정계수값이 나오는데 음수면 위험 
+print("특성의 중요도 ", model.feature_importances_)
 
+#랜덤포레스트 : 의사결정트리 + 업그레이드, 여러개의 분석기를 함께 사용 - 앙상블
+#트리를 랜덤하게 많이 만들어서 평균값을 구한다. 할때마다 별도의 트리가 만들어져서 계속 측정치가 달라진다. 
+#  n_estimators : 만들 트리 최대 개수 
+# max_depth : 트리의 최대 깊이 지정 
+from sklearn.ensemble import RandomForestRegressor
+model = RandomForestRegressor(random_state=0, n_estimators=300, max_depth=3)
+model.fit(X_train, y_train) #학습을하고
+y_pred = model.predict(X_test)
+#선형회귀모델의 score함수 썼을때 결정계수 1이면 완벽하게 예측을 한거고 
+#0이면 거의 예측불가 - 인 경우가 있는데 심각하게 안맞는 상태 
+print("=== RandomForestRegressor Model ===")
+print("훈련셋", model.score(X_train, y_train))
+print("테스트셋", model.score(X_test, y_test)) #회귀분석에서 score 가 결정계수값이 나오는데 음수면 위험 
+print("특성의 중요도 ", model.feature_importances_)
 
+#그라디언트부스팅 : 앙상블 계열, 약한학습기들을 통해서 학습을 하고 보정작업을 거쳐서 결과를 찾아낸다.
+#sklearn GradientBoostion,  xgboost 라이브러리,  LightGBM ..... 
+#  
 
+#conda install xgboost 
+#conda install LightGBM  , Microsoft Visual C++ Build Tools  설치필요
+
+#learning_rate=0.1 학습률 , 머신러닝이 학습하는 속도를 조절한다. 
+#너무 높으면 : 막 빨리 빨리 학습하다가 잘못해서 최적의 위치를 지나쳐 갈 수 있다 
+#너무 낮으면 : 아주 천천히 느리게 학습을 한다. 아무리 가도 최저점을 못 도달하는 경우도 
+#GridSearch : 하이퍼파라미터들을 주면 알아서 테스트를 하면서 적절한 파라미터를 찾아낸다. 
+#            오래걸림 
+
+from sklearn.ensemble import GradientBoostingRegressor 
+model = GradientBoostingRegressor(random_state=0, n_estimators=10, max_depth=3, learning_rate=0.1)
+model.fit(X_train, y_train) #학습을하고
+y_pred = model.predict(X_test)
+#선형회귀모델의 score함수 썼을때 결정계수 1이면 완벽하게 예측을 한거고 
+#0이면 거의 예측불가 - 인 경우가 있는데 심각하게 안맞는 상태 
+print("=== GradientBoostingRegressor Model ===")
+print("훈련셋", model.score(X_train, y_train))
+print("테스트셋", model.score(X_test, y_test)) #회귀분석에서 score 가 결정계수값이 나오는데 음수면 위험 
+print("특성의 중요도 ", model.feature_importances_)
+
+#xgboost 
+from xgboost import XGBRegressor 
+model = XGBRegressor(random_state=0, n_estimators=10, max_depth=3, learning_rate=0.1)
+model.fit(X_train, y_train) #학습을하고
+y_pred = model.predict(X_test)
+#선형회귀모델의 score함수 썼을때 결정계수 1이면 완벽하게 예측을 한거고 
+#0이면 거의 예측불가 - 인 경우가 있는데 심각하게 안맞는 상태 
+print("=== XGBRegressor Model ===")
+print("훈련셋", model.score(X_train, y_train))
+print("테스트셋", model.score(X_test, y_test)) #회귀분석에서 score 가 결정계수값이 나오는데 음수면 위험 
+print("특성의 중요도 ", model.feature_importances_)
 
 
