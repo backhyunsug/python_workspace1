@@ -17,11 +17,23 @@ from .models import Blog
 from django.core import serializers
 
 #http://127.0.0.1:8000/blog/list
-def getList(request):
+def getList2(request):
     dataSet = list(Blog.objects.values())
     #직렬화 - 객체를 파일이나 네트워크로 출력하고자 하는걸 직렬화
     #data = serializers.serialize("json", dataSet)
     return JsonResponse(dataSet, safe=False, json_dumps_params={'ensure_ascii': False})
+
+def getList(request):
+    dataSet = list(Blog.objects.values())
+    return render(request, "blog/blog_list.html", {"blogList":dataSet})
+
+def view(request, id ):
+    print("id = ", id)
+    #sql = "select * from blog_blog where id="+str(id) #직접하지 않고 
+    blog = Blog.objects.get(id=id)
+
+    return render(request, "blog/blog_view.html", {"blog":blog})
+
 
 def write(request): #blog_write.html페이지로 이동 
     return render(request, "blog/blog_write.html")

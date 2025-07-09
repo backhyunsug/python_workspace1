@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     #사용자가 만든 앱을 등록과정을 거쳐야 한다 
     "blog.apps.BlogConfig",
+    "score.apps.ScoreConfig", #등록을 해줘야 makemigration이나 migrate가 작동된다. 
     #"guestbook.apps.GuestbookConfig",
     
     "django.contrib.admin",

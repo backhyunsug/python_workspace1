@@ -23,6 +23,7 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("blog/", include("blog.urls")),
+    path("score/", include("score.urls")),
     path("guestbook/", include("guestbook.urls"))
     #path("blog/", views.index)
     #path함수가 url http://127.0.0.1:8000/blog 
