@@ -40,3 +40,24 @@ print("-------- 스케일된 서포트벡터머신 ------------")
 print("훈련셋", model.score(X_train_scaled, y_train_scaled))
 print("테스트셋", model.score(X_test_scaled, y_test_scaled))
 
+
+#타이타닉 데이터 
+#1.결측치
+#2.이상치 처리 
+#3.스케일링 
+#4.서포트벡신
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
