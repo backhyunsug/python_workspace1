@@ -68,6 +68,24 @@ for train_index, test_index in sfk.split(X, y):
 print(train_score)
 print(test_score)
 
+
+#cross_val_score : 교차검증에 사용되는 함수
+from sklearn.model_selection import cross_val_score
+model = DecisionTreeClassifier()
+result = cross_val_score(model, X, y, scoring="accuracy", cv=5 ) 
+#정밀도로 하자 cv=5 몇번 접을꺼냐 
+print(result)  
+
+
+
+
+
+
+
+
+
+
+
          
         
 
