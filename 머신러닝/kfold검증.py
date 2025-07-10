@@ -24,7 +24,9 @@ print(y)
 
 from sklearn.model_selection import KFold 
 from sklearn.model_selection import StratifiedKFold #개선한 버전 
-from sklearn
+from sklearn.tree import DecisionTreeClassifier
+train_score=[]
+test_score=[]
 kfold = KFold(n_splits=5) #몇개로 쪼갤지를 알려준다. 
 for train_index, test_index in kfold.split(X):
     #print(train_index) #데이터를 잘라내야할 인덱스목록 
@@ -33,10 +35,20 @@ for train_index, test_index in kfold.split(X):
     y_train = y[train_index]
     X_test = X[test_index]
     y_test = y[test_index]
-    print(y_train)
-    print(y_test)    
+    #print(y_train)
+    #print(y_test)
+    model = DecisionTreeClassifier()
+    model.fit(X_train, y_train) 
+    train_score.append(model.score(X_train, y_train))
+    test_score.append(model.score(X_test, y_test))
+
+print(train_score)
+print(test_score)
+        
 
 print("StratifiedKFold")
+train_score=[]
+test_score=[]
 sfk = StratifiedKFold(n_splits=5) #몇개로 쪼갤지를 알려준다.
 #split에 y값도 주면 섞어서 쪼개준다. 분류문제 일경우에 불균등 분할을 => 균등분할로 바꾸는 역할을 한다. 
 for train_index, test_index in sfk.split(X, y):
@@ -46,8 +58,16 @@ for train_index, test_index in sfk.split(X, y):
     y_train = y[train_index]
     X_test = X[test_index]
     y_test = y[test_index]
-    print(y_train)
-    print(y_test) 
+    #print(y_train)
+    #print(y_test) 
+    model = DecisionTreeClassifier()
+    model.fit(X_train, y_train) 
+    train_score.append(model.score(X_train, y_train))
+    test_score.append(model.score(X_test, y_test))
+
+print(train_score)
+print(test_score)
+
          
         
 
