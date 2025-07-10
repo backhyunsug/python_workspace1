@@ -72,4 +72,31 @@ ax[0].legend(['malignant', 'benign'], loc='best')  #범수 -각각이 의미하�
 fig.tight_layout() #차트 재정렬 
 plt.show()  
 
+#히트맵 산포도행렬 못그릴때 자주 사용하는 차트이다. - 상관관계를 확인할 수 있다 
+#1. 상관관계 행렬을 만들자 
+correlation_matrix = df1.corr() #데이터 프레임이 corr 이라는 함수가 있어서 상관계수를 계산한다 
+print(correlation_matrix[:10])
+
+#신기술 - plotly - R언어에 있던거가 파이썬에 들어옴 
+#fast-api  : 풀스택개발 - 프론트랑 백앤드를 쪼개  장고에서 html, css, javascript가 독립 
+#            백앤드 json형태로 데이터를 주고받는 역할만 해야 한다. 
+#            백앤드에 필요한 기술만 집약 , 장고든 플라스크든 별볼일 없어지고 있다는 생각이 
+#            nodejs 애초에 자바스크립트라 기본적으로 json으로 주고 받는게 디폴트 
+
+#2.히트맵그리기 
+annot=True #차트에 줄 속성, 히트맵의 셀에 값을 표시한다. False면 표시안함 
+cmap = 'coolwarm' #히트맵에서 가장많이 사용하는 색상 양의관계는 빨간색, 음의관계는 파란색 
+ftm ='.2f'  #표시될 숫자의 소수점 자리수 지정 
+sns.heatmap(correlation_matrix, 
+            annot=annot, cmap=cmap, fmt=ftm, 
+            linewidths=.5  ) #셀사이에 선추가 
+plt.xticks(rotation=45, ha='right') #x축 레이블 회전 
+plt.yticks(rotation=0)
+plt.tight_layout() #레이블겹침방지
+plt.show()
+
+#히트맵 => 특성이 더 많으면 힘들다 
+
+
+
 
