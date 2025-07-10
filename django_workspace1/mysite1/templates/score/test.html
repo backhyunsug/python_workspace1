@@ -11,9 +11,8 @@
         {%csrf_token%}
         {{form.as_p}}
     </form>
-    
-    <button type="button" id="btnSend">등록</button>
-   
+ <button type="button" id="btnSend">등록</button>
+    </form>
 </body>
 <script>
     //html DOM 구조가 완성되고 나면 onload 이벤트가 발생한다 
@@ -23,11 +22,7 @@
                 let frm = document.myform; //form객체를 가져온다 , name속성
                 //let frm = document.querySelector("#myform") 도 가능,id속성
                 frm.method="post";
-                let modify='{{modify}}';
-                if (modify=='True')
-                    frm.action = "/score/update/{{id}}";
-                else 
-                    frm.action = "/score/save";
+                frm.action = "/score/update";
                 frm.submit(); //서버로 전송하기  
             }
         );

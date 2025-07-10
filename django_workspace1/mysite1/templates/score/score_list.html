@@ -1,23 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        table { width: 80%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .pagination { margin-top: 20px; text-align: center; }
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #337ab7;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background-color: #f2f2f2;
+        }
+        .pagination .current-page {
+            background-color: #337ab7;
+            color: white;
+            border-color: #337ab7;
+            font-weight: bold;
+        }
+        .pagination .disabled {
+            color: #ccc;
+            pointer-events: none; /* 클릭 비활성화 */
+        }
+    </style>
 </head>
 <body>
-    <h1>{{title}}</h1>
+    <form name="myform" id=""myform>
+    <h1>{{ title }} 목록</h1>
 
     <table>
-        {%for item in scoreList %}
-        <tr>
-            <td>{{item.id}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.kor}}</td>
-            <td>{{item.eng}}</td>
-            <td>{{item.mat}}</td>    
-        </tr>
-        {%endfor%}
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>학생 이름</th>
+                <th>과목</th>
+                <th>점수</th>
+                <th>작성일</th>
+                </tr>
+        </thead>
+        <tbody>
+            {# page_obj.object_list는 현재 페이지에 보여줄 Score 객체들의 리스트입니다. #}
+            {% for score in page_obj.object_list %}
+            <tr>
+                <td>{{ score.id }}</td>
+                <td><a href="{%url 'score:score_view' score.id %}">{{ score.name }}</a></td>
+                <td>{{ score.kor }}</td> {# 예시 #}
+                <td>{{ score.eng }}</td> {# 예시 #}
+                <td>{{ score.wdate|date:"Y-m-d" }}</td> {# 예시: 날짜 포맷 #}
+            </tr>
+            {% empty %} {# 쿼리셋이 비어있을 경우 #}
+            <tr>
+                <td colspan="5">데이터가 없습니다.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+
+    {# 페이징 컨트롤 #}
+    <div class="pagination">
+        {# 이전 페이지 링크 #}
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">이전</a>
+        {% else %}
+            <span class="disabled">이전</span>
+        {% endif %}
+
+        {# 페이지 번호 표시 #}
+        <span>
+            페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {# 다음 페이지 링크 #}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">다음</a>
+        {% else %}
+            <span class="disabled">다음</span>
+        {% endif %}
+
+        {# 선택적: 전체 페이지 번호 목록 (많은 페이지일 경우 적절히 조절 필요) #}
+        <div style="margin-top: 10px;">
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <span class="current-page">{{ i }}</span>
+                {% else %}
+                    <a href="?page={{ i }}">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <button type="button" id="btnWrite">작성</button>
+</form>
+
+    <script>
+    //html DOM 구조가 완성되고 나면 onload 이벤트가 발생한다 
+    window.onload= ()=>{
+        document.querySelector("#btnWrite").addEventListener("click", 
+            ()=>{
+                let frm = document.myform; //form객체를 가져온다 , name속성
+                frm.action = "/score/write";
+                frm.submit(); //서버로 전송하기  
+            }
+        );
+    }
+</script>
+
 </body>
 </html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+
+    <table>
+        {%for item in scoreList %}
+        <tr>
+            <td>{{item.id}}</td>
+            <td><a href="{%url 'score:score_view' item.id %}">{{item.name}}</a></td>
+            <td>{{item.kor}}</td>
+            <td>{{item.eng}}</td>
+            <td>{{item.mat}}</td>    
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+</html>
