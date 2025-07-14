@@ -45,12 +45,18 @@
         </thead>
         <tbody>
             {# page_obj.object_list는 현재 페이지에 보여줄 Score 객체들의 리스트입니다. #}
+            {# 10개만 잘라온 데이터가 page_obj.object_list 에 저장되어 있다 #}
             {% for score in page_obj.object_list %}
             <tr>
                 <td>{{ score.id }}</td>
                 <td><a href="{%url 'score:score_view' score.id %}">{{ score.name }}</a></td>
                 <td>{{ score.kor }}</td> {# 예시 #}
                 <td>{{ score.eng }}</td> {# 예시 #}
+                <!-- 직접 쿼리에서 date_format('%Y-%m-%d', wdate) wdate 바꿔오는데 #
+                orm방식은 쿼리를 내부적으로 만들어지기때문에 format를 지정할 다른요소가 필요
+                score.wdate|date:"Y-m-d"   | 필터 걸러서 다른걸 적용해라 
+                필터적용 문법 날짜나 html 다 다르게 적용됨 찾아서 써야 한다 
+                 -->
                 <td>{{ score.wdate|date:"Y-m-d" }}</td> {# 예시: 날짜 포맷 #}
             </tr>
             {% empty %} {# 쿼리셋이 비어있을 경우 #}
@@ -63,14 +69,18 @@
 
     {# 페이징 컨트롤 #}
     <div class="pagination">
-        {# 이전 페이지 링크 #}
+         <!-- 이전 페이지 링크  page_obj.has_previous 이전으로 옮길 수 있는지 여부를 물어본다 
+            page_obj.previous_page_number 가 이전 페이지 정보를 갖고 있다  -->
+        
         {% if page_obj.has_previous %}
             <a href="?page={{ page_obj.previous_page_number }}">이전</a>
         {% else %}
             <span class="disabled">이전</span>
         {% endif %}
 
-        {# 페이지 번호 표시 #}
+         <!-- 페이지 번호 표시   page_obj.number -현재페이지 정보
+            page_obj.paginator.num_pages - 전체 페이지 개수  -->
+        
         <span>
             페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
         </span>
@@ -82,9 +92,10 @@
             <span class="disabled">다음</span>
         {% endif %}
 
+       
         {# 선택적: 전체 페이지 번호 목록 (많은 페이지일 경우 적절히 조절 필요) #}
-        <div style="margin-top: 10px;">
-            {% for i in paginator.page_range %}
+        <div style="margin-top: 10px;">  
+            {% for i in page_obj.paginator.page_range %}
                 {% if page_obj.number == i %}
                     <span class="current-page">{{ i }}</span>
                 {% else %}

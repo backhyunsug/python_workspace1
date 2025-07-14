@@ -41,8 +41,8 @@ test = test.dropna(axis=0, how='any')
 
 #2.이상치 제거 
 #boxplot을 그려보자 
-train.boxplot() #데이터프레임이 내부적으로 몇개의 차트는 가지고 있다  
-plt.show() #이상치를 확인하기 위해 boxplot를 그려보자 
+# train.boxplot() #데이터프레임이 내부적으로 몇개의 차트는 가지고 있다  
+# plt.show() #이상치를 확인하기 위해 boxplot를 그려보자 
 
 import numpy as np
 def outfliers_iqr(data):
@@ -64,7 +64,45 @@ for i in ['Fare', 'Age']:
     test[i][test[i]<lower] = lower 
     test[i][test[i]>upper] = upper 
 
-train.boxplot() #데이터프레임이 내부적으로 몇개의 차트는 가지고 있다  
-plt.show() #이상치를 확인하기 위해 boxplot를 그려보자 
+# train.boxplot() #데이터프레임이 내부적으로 몇개의 차트는 가지고 있다  
+# plt.show() #이상치를 확인하기 위해 boxplot를 그려보자 
 
-    
+
+#3.원핫인코딩 
+train = pd.get_dummies(train)
+print(train.head())
+print(train.columns)
+
+#산포도행렬이든지 아니면 상관계수라도 
+print(train.corr()) #- 상관계수를 구할 수 없는 필드들이 있어서 출력안됨 
+# import seaborn as sns  #특성의 개수가 너무 많아서 메모리 부족임 
+# sns.pairplot( train, diag_kind='kde', 
+#               hue='Survived', palette='bright') 
+# plt.show() 
+
+#Survived가 젤 처음에 있음 
+X = train.iloc[:, 1:] 
+y = train.iloc[:, 0]
+print(X.shape)
+print(y.shape)
+
+from sklearn.ensemble import RandomForestClassifier
+model = RandomForestClassifier(n_estimators=100) 
+model.fit(X, y)
+print(model.score(X, y))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
