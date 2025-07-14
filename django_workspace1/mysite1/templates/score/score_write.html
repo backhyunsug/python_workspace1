@@ -10,6 +10,10 @@
     <form name="myform" id="myform" >
         {%csrf_token%}
         {{form.as_p}}
+        <!--html 서버로 전송시켜서 -> request객체에 담아서 모델에 담아서 
+        디비에 저장 :  form 클래스가 이걸 대체 form클래스에 있는 fields 과 
+        labels 를 보고 직접 태그를 생성한다  p태그로 감싸서 :
+        데이터를 입력으로 받을것들만 지정해야 한다-->
     </form>
     
     <button type="button" id="btnSend">등록</button>
