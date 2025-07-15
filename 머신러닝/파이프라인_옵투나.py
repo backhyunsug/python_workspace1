@@ -42,6 +42,8 @@ print(f"y_test 분포 :  {dict(zip(*np.unique(y_test, return_counts=True) ))} ")
 #라이브러리 경향이 : 콜백함수를 만들어서 파라미터로 전달해주면 된다. 
 #옵투나가 호출할 콜백함수를 만들어야 한다 
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline 
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 def objective(trial): #변수명은 마음대로 
     #옵투나를 통해 탐색할 하이퍼파라미터 범위를 정의 한다 
     
@@ -58,8 +60,13 @@ def objective(trial): #변수명은 마음대로
                 n_estimators=n_estimators,
                 random_state=42,
                 n_jobs=-1)  #내부 프로세스 cpu개수 *2 라서 -1을 주면 알아서 최대치를 사용한다 
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
+   
+    pipeline = Pipeline(
+        [('scaler', StandardScaler()),
+         ('classifier', model)]    
+    ) 
+    pipeline.fit(X_train, y_train)
+    y_pred = pipeline.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred) #예측 정확도 
     return accuracy #반드시 마지막에 리턴해야 한다. 목적값 
     
@@ -72,4 +79,5 @@ study.optimize( objective, n_trials=50) #콜백함수, 회수를 지정한다
 print(f"최고 정확도 : {study.best_trial.value}" )
 print(f"하이퍼파라미터 {study.best_trial.params}" )
 
-    
+
+#fetch_california_housing() 이 데이터 가져다가 파이프라인하고 그리드서치 복습 
