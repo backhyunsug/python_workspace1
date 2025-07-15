@@ -73,3 +73,4 @@ for model_name, result in results.items():
     print("Test Set Accuracy:", accuracy_score(y_test, y_pred))
 
 
+#옵투나 => 베이지안정리, GridSearchCV업그레이드 버전 
