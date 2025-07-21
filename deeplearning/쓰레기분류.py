@@ -55,20 +55,7 @@ def initData():
     print("데이터 저장 완료")
 
 def loadData():
-    foldername = os.listdir(base_path)
-    dataList =[]
-    targetList =[]
-    for i in  range(0, len(foldername)):
-        f1 = np.load(f"imagedata{i}_thresh.npz")
-        dataList.append(f1["data"])
-        targetList.append(f1["targets"])
-            
-    X = np.concatenate( tuple(dataList), axis=0)
-    y = np.concatenate( tuple(targetList), axis=0)
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=10, test_size=0.3) 
-    print(X_train.shape, y_train.shape)
-    print(X_test.shape, y_test.shape)
+    
     
     return X_train, y_train, X_test, y_test
     
