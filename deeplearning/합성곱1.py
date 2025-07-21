@@ -1,5 +1,5 @@
 #fationminst 자료 
-from tensorflow.keras.datasets import fashion_mnist
+from keras.datasets import fashion_mnist
 
 (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
 print(X_train.shape)
@@ -7,7 +7,7 @@ print(y_train.shape)
 print(X_test.shape)
 print(y_test.shape)
 
-from tensorflow.keras import models, layers 
+from keras import models, layers 
 img_height=28
 img_width =28
 network = models.Sequential(
@@ -18,10 +18,10 @@ network = models.Sequential(
         layers.Conv2D(32, (3,3), activation='relu'),
         #32 - 출력값 , (3,3) - 필터의 크기 보통 이값을 사용한다 
         layers.Conv2D(64, (3,3), activation='relu'),
-        layers.MaxPooling((2,2)), #서브샘플링, 특성의 개수를 줄여서 과대적합을 방지한다
+        layers.MaxPooling2D((2,2)), #서브샘플링, 특성의 개수를 줄여서 과대적합을 방지한다
         
         #CNN와 완전연결망을 연결하기 위한 계층 4차원 => 2차원으로 바뀌어야 한다 
-        layers.Flattern(),
+        layers.Flatten(),
 
         #완전연결망 
         layers.Dense(128, activation='relu'),
@@ -31,8 +31,9 @@ network = models.Sequential(
 )
 
 import tensorflow as tf 
+import keras 
 network.compile(optimizer='adam', 
-                loss=tf.keras.SparseCategoricalCrossentrophy(),  #라벨이 정수형일때)
+                loss=keras.losses.SparseCategoricalCrossentropy(),  #라벨이 정수형일때)
                 metrics = ['accuracy'])
 
 print(network.summary())
