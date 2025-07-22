@@ -104,5 +104,68 @@ def ImageCopy():
         dst = os.path.join(validation_dogs_dir, fname)
         shutil.copyfile(src, dst)  #1개씩 복사
 
-ImageCopy()
+#ImageCopy() - 복사 끝남 
 
+from keras import models, layers
+#DataSet 사용하기 
+def deeplearning():
+    #데이터 증강 파라미터-> 에포크마다 데이터를 조금씩 변형해서 가져온다. 
+    #과대적합을 막기 위해서  
+    data_augmentation = keras.Sequential(
+            [
+		            layers.RandomFlip("horizontal", input_shape=(180, 180, 3)),
+                    layers.RandomRotation(0.1),
+                    layers.RandomZoom(0.1),
+                    #layers.RandomFlip("horizontal"): 이미지를 수평으로 무작위로 뒤집습니다. 
+                    #layers.RandomRotation(0.1): 이미지를 최대 2pi 라디안의 10 (즉, 36도)까지 무작위로 회전시킵니다.
+                    #layers.RandomZoom(0.1): 이미지를 최대 10%까지 무작위로 확대하거나 축소합니다.
+                ]
+        )
+    
+    model = models.Sequential() 
+    #이미지 스켈일링 
+    model.add( layers.Rescaling(1./255))
+    model.add(data_augmentation) ##########################################################
+    model.add(layers.Conv2D(32, (3,3), activation='relu' ))
+    model.add(layers.MaxPooling2D(2,2))
+    model.add(layers.Conv2D(64, (3,3), activation='relu' ))
+    model.add(layers.MaxPooling2D(2,2))
+    model.add(layers.Conv2D(32, (3,3), activation='relu' ))
+    model.add(layers.MaxPooling2D(2,2))
+    model.add(layers.Flatten())
+    model.add(layers.Dropout(0.5)) #중간에 데이터를 절반쯤 없애서 과대적합을 방지 
+    model.add(layers.Dense(128, activation='relu'))
+    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(1, activation='sigmoid'))
+
+    model.compile(optimizer='adam', 
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
+
+
+    #데이터셋 - 폴더로 부터 이미지 파일을 읽어온다 
+    train_ds = keras.utils.image_dataset_from_directory(
+        train_dir,  #폴더를 지정한다 
+        validation_split=0.2, #훈련셋을 훈련셋과 검증셋으로 8:2구조로 나눠서검증
+        seed=123,
+        subset="training",
+        image_size=(180,180),
+        batch_size=16
+    )
+
+    val_ds = keras.utils.image_dataset_from_directory(
+        train_dir,  #폴더를 지정한다 
+        validation_split=0.2, #훈련셋을 훈련셋과 검증셋으로 8:2구조로 나눠서검증
+        seed=123,
+        subset="validation",
+        image_size=(180,180),
+        batch_size=16
+    )
+    
+    model.fit(train_ds, 
+              validation_data=val_ds,
+              epochs=50)
+    
+    model.save("catanddog.keras")#모델 저장하기 
+
+deeplearning()
