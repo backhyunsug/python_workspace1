@@ -43,6 +43,16 @@ test_dogs_dir = os.path.join(test_dir, 'dogs')
 validation_cats_dir = os.path.join(validation_dir, 'cats')
 validation_dogs_dir = os.path.join(validation_dir, 'dogs')
 
+#학습모델(네트워크) - 학습을 완료한 모델을 저장시켜놓고 불러다가 예측을 할 수 있다 
+model_save_path_keras = 'cat_and_dogs_model.keras' #확장자가 h5=>keras로 바뀜
+#케라스가 지원한다 
+history_filepath = 'cats_and_dogs_history.bin' 
+#학습을 할때마다 정확도, 손실값이 있는 있는 저장해서 던져준다 
+#이 값 자체는 저장을 지원하지 않는다. 그래서 pickle을 써서 저장하는데 
+#희한하게도 history 자체로 저장하면 에러나고 history.history를 저장해야 에러가 안난다
+
+
+
 def ImageCopy():
     #디렉토리내의 파일개수 알아내기
     totalCount = len(os.listdir(original_dataset_dir))
@@ -161,11 +171,134 @@ def deeplearning():
         image_size=(180,180),
         batch_size=16
     )
-    
-    model.fit(train_ds, 
-              validation_data=val_ds,
-              epochs=50)
-    
-    model.save("catanddog.keras")#모델 저장하기 
 
-deeplearning()
+
+    history = model.fit(train_ds, 
+              validation_data=val_ds,
+              epochs=30)
+    
+    #모델 저장하기 
+    try: 
+        model.save(model_save_path_keras)#모델 저장하기 
+        print("모델 저장 완료")
+    except Exception as e:
+        print(f"모델 저장중 오류 발생 {e}")
+
+    #히스토리 저장하기 
+    try:
+        with open(history_filepath, 'wb') as file: 
+            pickle.dump(history.history, file)
+        print("히스토리 저장 완료")
+    except Exception as e:
+        print(f"히스토리 저장중 오류 발생 {e}")
+
+def drawChart():
+    print("저장된 모듈 불러오기")
+    try:
+        loaded_model_keras = keras.models.load_model(model_save_path_keras) 
+        print("모델 부르기 성공")
+    except Exception as e:
+        print(f"모델 로딩중 실패 : {e}")
+
+    print("히스토리 불러오기")
+    try:
+        with open(history_filepath, "rb") as file:
+            history = pickle.load(file)
+            print("히스토리 로딩 성공")
+    except Exception as e:
+        print(f"히스토리 로딩중 실패 : {e}")
+
+
+    #히스토리의 키값들 가져오기 - 에포크회수만큼 list로 가져온다 
+    acc = history['accuracy']
+    val_acc = history['val_accuracy']
+    loss = history['loss']
+    val_loss = history['val_loss']
+
+    #x축 좌표값 만들기 
+    X = range(len(acc))  
+
+    plt.plot(X, acc, 'ro', label='Training accuracy')
+    plt.plot(X, val_acc, 'b', label='Validation accuracy')
+    plt.title("Training and Validation accuracy")
+
+    #새로운 창을 열어 차트를 그린다.
+    plt.figure() #새로운창을만든다 
+    plt.plot(X, loss, 'ro', label='Training loss')
+    plt.plot(X, val_loss, 'b', label='Validation loss')
+    plt.title("Training and Validation loss")
+
+    plt.show() #전체 한번에 출력
+
+def Predict(): #예측하기 
+    #1.학습된 모듈을 불러온다 
+    loaded_model_keras = None
+    try:
+        loaded_model_keras = keras.models.load_model(model_save_path_keras) 
+        print("모델 부르기 성공")
+    except Exception as e:
+        print(f"모델 로딩중 실패 : {e}")
+        return 
+
+    #예측데이터셋 
+    val_ds = keras.utils.image_dataset_from_directory(
+        train_dir,  #폴더를 지정한다 
+        validation_split=0.2, #훈련셋을 훈련셋과 검증셋으로 8:2구조로 나눠서검증
+        seed=123,
+        subset="validation",
+        image_size=(180,180),
+        batch_size=16
+    )
+
+    print("----- 라벨링 ------")
+    class_names = val_ds.class_names 
+    print(class_names)
+
+    total_match_count =0 #전체 일치한 개수 
+    total_samples_proceed=0 #전체처리개수 
+    max_samples_to_process = 500 #데이터르 500개 까지만 예측해보자 
+    for input_batch, labels_batch in val_ds:
+        #val_ds 가 폴더로 부터 이미지 파일을 읽어오는데 batch_size만큼씩 읽어온다 
+        total_samples_proceed += len(labels_batch)
+
+        #예측하기 
+        prdictions_batch = loaded_model_keras.predict(input_batch, verbose=2)
+        print(prdictions_batch)
+
+        #예측결과와 실제 레이블 비교 
+        #이진분류라서 결과값이 하나가 온다. 꽃분류같으면 맞는다 [0.3, 0.7]  [0.3]
+        #이진분류일때는 라벨이 1인 요소의 확률을 전달한다 
+        #다중분류일때는 [0.1, 0.1, 0.6, 0.1, 0.1]
+        predicted_classes = (prdictions_batch>0.5).astype(int) #0.5보다 큰거는 True, 작은거는 False 
+        print("예측 : ", predicted_classes.flatten())
+        print("라벨 : ", labels_batch.numpy()) #Tensor -> numpy로
+        
+        match_count = np.sum(predicted_classes.flatten()== labels_batch.numpy() )
+        total_match_count+= match_count
+
+    #print(total_samples_proceed, len(labels_batch))
+    print("전체데이터개수 ", total_samples_proceed)
+    print("맞춘개수 ", total_match_count)
+    print("못맞춘개수 ", total_samples_proceed-total_match_count)
+    
+def main():
+    while True:
+        print("1. 파일복사")
+        print("2. 학습")
+        print("3. 차트")
+        print("4. 예측")
+        sel = input("선택 : ")
+        if sel=="1":
+            ImageCopy()
+        elif sel=="2":
+            deeplearning()
+        elif sel=="3":
+            drawChart() 
+        elif sel=="4":
+            Predict() 
+        else:
+            break 
+        
+
+if __name__ == "__main__":
+    main()

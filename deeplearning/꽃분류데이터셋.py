@@ -72,7 +72,7 @@ def study():
     )
 
     history = model.fit(train_ds, 
-              epochs=10,
+              epochs=30,
               validation_data = val_ds)
     #모델을 저장하자 
     model.save("flowers_model.keras")
@@ -80,7 +80,80 @@ def study():
     pickle.dump(history.history, file=f) #주의사항 : history만 저장하면 에러발생 
     f.close()
 
-study()
+def drawChart():
+    #히스토리를 읽어서 차트 그리기 
+    f = open("flowers_hist.hist", "rb")
+    history = pickle.load(f)
+    f.close()
+    print(history.keys()) #키값을 보여줌 
+
+    acc = history['accuracy']
+    val_acc = history['val_accuracy']
+    loss = history['loss']
+    val_loss = history['val_loss']
+
+    epochs = range(len(acc))
+
+    #'bo -- blue 동그리미  
+    plt.plot(epochs, acc, 'bo', label='Training acc' )
+    plt.plot(epochs, val_acc, 'b', label='Validation acc' )
+    plt.title('Traing and validation accuray') 
+    plt.legend()
+
+    plt.figure() #창하나 더 띄우고->손실값을 띄우겠다 
+    plt.plot(epochs, loss, 'bo', label='Training loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.legend()
+
+    plt.show() 
+
+def main():
+    while(True):
+        print("1.기본학습")
+        print("2.차트")
+        print("3.예측")
+        print("4.평가하기")
+        sel = input("선택 : ")
+        if sel=="1":
+            study() 
+        elif sel=="2":
+            drawChart()
+        elif sel=="3":
+            predict()
+        else:
+            return 
+
+def predict():
+    #1. 모델 가져오기 
+    model = load_model("flowers_model.keras")
+    test_dir="./data/flowers/test" 
+    test_ds = keras.preprocessing.image_dataset_from_directory( 
+        test_dir, 
+        seed=1234,  
+        image_size=(180, 180),
+        batch_size=1  #한개씩 가져오기, 배치사이즈 단위로 업어와서 만약에 여기에 1이 아닌값을 넣으면    
+    )                 #한번에 여러개씩 가져온다. 예측할 데이터 셋이 만을때는 배치에 1이상의 값을 주고 
+                      #내부 for문 다시 처리하기  
+    print("예측하기")
+    print("데이터 개수 ",  tf.data.Dataset.cardinality(test_ds).numpy())  
+
+    i=0
+    match_cnt = 0 
+    for images, labels in test_ds:
+        #테스트데이터셋으로부터 이미지들과 라벨즈를 갖고 온다 
+        output=model.predict(images)
+        print("라벨 :", labels, np.argmax(output, axis=1), len(output))
+        if labels[i] == np.argmax(output): #softmax 라벨이 확률로 온다, 그중에 가장 큰값의 인덱스
+            match_cnt+=1 
+    print("일치숫자", match_cnt)
+    print("불일치개수",  tf.data.Dataset.cardinality(test_ds).numpy()- match_cnt)
+
+if __name__=="__main__":
+    main()
+
+
+
 
 
 
