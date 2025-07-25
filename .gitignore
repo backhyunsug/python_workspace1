@@ -134,22 +134,6 @@ dmypy.json
 *.model
 *.weights
 
-# Large datasets
-*.csv
-*.json
-*.xml
-*.parquet
-*.feather
-
-# Documents
-*.pdf
-*.doc
-*.docx
-*.ppt
-*.pptx
-*.xls
-*.xlsx
-
 # IDE
 .vscode/
 .idea/
