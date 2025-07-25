@@ -133,6 +133,9 @@ dmypy.json
 *.joblib
 *.model
 *.weights
+*.keras
+*.bin
+*.zip
 
 # IDE
 .vscode/
