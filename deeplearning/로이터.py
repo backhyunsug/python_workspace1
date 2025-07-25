@@ -1,136 +1,150 @@
-#imdb1.py 
-import keras 
-from keras.datasets import reuters #다중분류  
-from keras import models 
-from keras import layers
-import tensorflow as tf 
-
-import tensorflow as tf 
+from keras.datasets import reuters
+from keras import models
+from keras import layers 
 import os
 
-#머신러닝은 라벨을 원핫인코딩 안함. 딥러닝은 해줘 줘야 한다 46개 분류 
+#즉시실행 모드 끄고 하자, 메모리 부족 문제 발생시   
+#tf.compat.v1.disable_eager_execution()
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-#케라스 입장에서 문자열 데이터들을 어떤 형태로 numpy배열로 만들었는지를 보고 
-#imdb 데이터셋 => numpy 배열로 바꿔서 온거 
-#문자열들을 어떤식으로  numpy 배열로 바꿀 것인가? (다음주에) 
-#영화평들을 다 읽어서 => numpy배열로 바꾼다.(케라스)
-#빈도수로 파악할때 자주 쓰는 단어 10000 개만 가져다 쓰겠다 
-#num_words=10000 :빈도수를 기반으로 해서 자주 쓰는 단어 만개만 가져다 쓰겠다 
-(train_data, train_labels), (test_data, test_labels) = reuters.load_data(num_words=10000)
-#데이터 개수 확인
-print(train_data.shape)
-print(train_labels.shape)
-print(test_data.shape)
-print(test_data.shape)
-#데이터 자체도 궁금 
-print(train_data[:3]) #문장을 list타입으로  가져온다
-print(train_labels[:3]) 
+(train_data, train_labels), (test_data, test_labels)= reuters.load_data(num_words=10000)
+print( train_data.shape)
+print( train_labels.shape)
+print( test_data.shape)
+print( test_labels.shape)
 
-#데이터를 시퀀스로 바꿔야 하는데, 시퀀스로 바꾸는 과정은 담주 
-#get_word_index() 
-word_index = imdb.get_word_index() 
-print(type(word_index))
-#print(word_index.keys())
+print( train_data[0])
 
-def showDictionay(cnt): #word_index의 내부구조 확인 
-    i=0 
-    for key in word_index:
-        if i >= cnt: 
-            break 
-        print(key, word_index[key])
-        i += 1 
+#원래의 단어로 바꾼다 
+# word_index는 단어와 정수 인덱스를 매핑한 딕셔너리입니다
+word_index = reuters.get_word_index()
+# 정수 인덱스와 단어를 매핑하도록 뒤집습니다
+reverse_word_index = dict([(value, key) for (key, value) in word_index.items()])
+# 리뷰를 디코딩합니다. 
+# 0, 1, 2는 '패딩', '문서 시작', '사전에 없음'을 위한 인덱스이므로 3을 뺍니다.케라스 만든사람들이 필요에 의해서 만들음
+decoded_review = ' '.join([reverse_word_index.get(i - 3, '?') for i in train_data[0]])
 
-showDictionay(10) #word_index  영어단어:인덱스 
-#I like star.      {"I":0, "like":1,  "star":2 ,............
-#[0, 1, 2]
 
-#받아온 시퀀스를 문장으로 원복 시켜  보자  word_index는 단어:숫자 
-#reverse_index   => 숫자:단어 
-reverse_index = [(value, key) for(key, value) in word_index.items()]
-for i in range(0, 10):
-    print(reverse_index[i])
-#dict으로 바꿔야 한번에 검색함 
-reverse_index = dict(reverse_index)
+print(decoded_review )
 
-#시퀀스를 문장으로 바꾸기 
-#케라스만든 사람들이 0~3 번까지는 특수목적으로  인덱스 4부터 쓸모가 있음 
-def changeSentence(id):
-    sequence = train_data[id]
-    #10000 개만 가져오니까 없는 단어도 있을 수 있음 그때 두번째인자로 바꿔준다. 
-    sentence = ' '.join( reverse_index.get(i-3, '*') for i in sequence)
-    print(sentence)
 
-changeSentence(0)
-changeSentence(1)
 
-#train_data : 시퀀스의 배열   [3,42,1,2,3]
-#원핫인코딩 - 내부함수 말고 한번 만들어보자 
-#10000개 까지만 불러오기로 함
-import numpy as np  
-def vectorize_sentences(sequences, dimensions=10000):
-    results = np.zeros( (len(sequences), dimensions) ) #zeros 가 매개변수로 tuple을 받아간다  
-    #문장개수 * 10000 개의 2차원배열, 0으로 채우는 
-    #0,0,0,0,0,0,,,,,,,,,,,0 
-    #0,0,0,0,0,0,,,,,,,,,,,0
-    for i, sequence in enumerate(sequences):#enumerate(list타입) - 인덱스와 요소를 하나씩 전달한다
-        #[1,4,11,12,6,5,4]) #해당위치를 1로 채운다 
-        results[i, sequence] = 1.
-        #넘파이배열 a[ [1,2,3,7,8] ] = 1
-    return results 
+import numpy as np
 
-X_train = vectorize_sentences(train_data) #시퀀스 =>원핫인코딩 
-X_test = vectorize_sentences(test_data)
-print(X_train[:3])
+#원핫인코딩으로 데이터를 변환한다 
+def vectorize_sequences(sequences, dimension=10000):
+    # 크기가 (len(sequences), dimension))이고 모든 원소가 0인 행렬을 만듭니다
+    results = np.zeros((len(sequences), dimension))
+    for i, sequence in enumerate(sequences):
+        results[i, sequence] = 1.  # results[i]에서 특정 인덱스의 위치를 1로 만듭니다
+    return results
 
-#훈련셋과 검증셋을 나눈다 - 전체 데이터 25000
-X_val = X_train[:10000]#검증 : 10000
-X_train = X_train[10000:] #훈련셋은 15000개
-y_val = train_labels[:10000]
-y_train = train_labels[10000:]
 
+# 훈련 데이터를 벡터로 변환합니다
+x_train = vectorize_sequences(train_data)
+# 테스트 데이터를 벡터로 변환합니다
+x_test = vectorize_sequences(test_data)
+
+"""
+def to_one_hot(labels, dimension=46):
+    results = np.zeros((len(labels), dimension))
+    for i, label in enumerate(labels):
+        results[i, label] = 1.
+    return results
+
+# 훈련 레이블 벡터 변환
+one_hot_train_labels = to_one_hot(train_labels)
+# 테스트 레이블 벡터 변환
+one_hot_test_labels = to_one_hot(test_labels)
+
+"""
+from keras.utils import to_categorical
+
+one_hot_train_labels = to_categorical(train_labels)
+one_hot_test_labels = to_categorical(test_labels)
+
+
+print( one_hot_train_labels)
+
+#신경망 만들기 
 model = models.Sequential()
-model.add(layers.Dense(16, activation='relu'))
-model.add(layers.Dense(16, activation='relu'))
-model.add(layers.Dense(16, activation='relu'))
-model.add(layers.Dense(1,  activation='sigmoid'))
+model.add(layers.Dense(64, activation='relu', input_shape=(10000,))) #입력층
+model.add(layers.Dense(64, activation='relu'))#히든레이어
+model.add(layers.Dense(46, activation='softmax')) #출력층
 
-model.compile( optimizer='rmsprop', 
-                loss='binary_crossentropy', 
-                metrics=['accuracy'])
-
-history = model.fit(X_train, y_train, epochs=50, batch_size=100, validation_data=(X_val, y_val))
-#평가하기 
-print("훈련셋", model.evaluate(X_train, y_train))
-print("테스트셋", model.evaluate(X_test, test_labels))
-
-#예측하기 
-pred = model.predict(X_test)
-print(pred[:10]) #라벨이 1이 될 확률을 준다 
-def changeData(pred):
-    for i in range(len(pred)):
-        if pred[i] <0.5:
-            pred[i] = 0 
-        else:
-            pred[i] = 1
-    return pred
-
-pred = changeData(pred)
-for i in range(0, 40):
-    print(pred[i], test_labels[i])
+#모델 컴파일 
+model.compile(optimizer='rmsprop',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
 
 
-# #훈련과 검증  정확도 그리기 
-import matplotlib.pyplot as plt 
-history_dict = history.history 
-acc = history_dict['accuracy']  #훈련셋 정확도
-val_acc = history_dict['val_accuracy'] #검증셋 정확도 
+#훈련검정셋을 만든다 
+x_val = x_train[:1000]
+partial_x_train = x_train[1000:]
 
-length = range(1,  len(history_dict['accuracy'])+1 ) #x축만들기 
-plt.plot( length, acc , 'bo',  label='Training acc')
-plt.plot( length, val_acc , 'b', label='Validation acc')
-plt.title("Training and Validation acc")
+y_val = one_hot_train_labels[:1000]
+partial_y_train = one_hot_train_labels[1000:]
+
+
+#학습을 시작한다 
+history = model.fit(partial_x_train,
+                    partial_y_train,
+                    epochs=5,
+                    batch_size=512,
+                    validation_data=(x_val, y_val))
+
+
+predictions = model.predict(x_test)
+
+# 7. 예측 결과 확인 (0번 뉴스 기사)
+predicted_class = np.argmax(predictions[0])
+actual_class = test_labels[0]
+
+print(f"예측 결과: {predicted_class}, 실제 정답: {actual_class}")
+
+
+for i in range(20):
+    pred = np.argmax(predictions[i])
+    actual = test_labels[i]
+    print(f"[{i}] 예측: {pred} / 실제: {actual}")
+
+import matplotlib.pyplot as plt
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = range(1, len(loss) + 1)
+
+plt.plot(epochs, loss, 'bo', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Validation loss')
+plt.title('Training and validation loss')
 plt.xlabel('Epochs')
-plt.ylabel('Acc')
+plt.ylabel('Loss')
 plt.legend()
+
 plt.show()
+
+plt.clf()   # 그래프를 초기화합니다
+
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+
+plt.plot(epochs, acc, 'bo', label='Training acc')
+plt.plot(epochs, val_acc, 'b', label='Validation acc')
+plt.title('Training and validation accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+
+plt.show()
+
+
+results = model.evaluate(x_val, y_val)
+print(results)
+
+#학습중의 history를 갖고 있다
+history_dict = history.history
+print( history_dict.keys())
+
+
+
 
