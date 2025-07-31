@@ -1,0 +1,3 @@
+#우리가 직접 벡터화를 해보자 
+import string 
+print("구두점", string.punctuation)

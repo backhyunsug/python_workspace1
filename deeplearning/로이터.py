@@ -89,7 +89,7 @@ partial_y_train = one_hot_train_labels[1000:]
 #학습을 시작한다 
 history = model.fit(partial_x_train,
                     partial_y_train,
-                    epochs=5,
+                    epochs=500,
                     batch_size=512,
                     validation_data=(x_val, y_val))
 

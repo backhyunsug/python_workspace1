@@ -168,3 +168,6 @@ config/secrets.py
 secrets.json
 .env.local
 .env.production
+
+
+deeplearning/aclImdb/
