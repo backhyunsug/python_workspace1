@@ -41,3 +41,4 @@ print(decoded_voca )
 
 decoded_sen = " ".join(decoded_voca[int(i)] for i in encoded)
 print(decoded_sen)
+
