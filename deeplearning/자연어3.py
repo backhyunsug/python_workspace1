@@ -109,9 +109,35 @@ for inputs, targets in binary_1gram_train_ds: #실제 읽어오는 데이터 확
     break #하나만 출력해보자 
 
 
+#모델 만들어서 반환하는 함수
+from keras import layers, models 
+def getModel(max_tokens=20000, hidden_dim=16):
+    inputs = keras.Input(shape=(max_tokens,)) #입력층 만들기 
+    x = layers.Dense(hidden_dim, activation='relu')(inputs)
+    x = layers.Dropout(0.5)(x) 
+    outputs = layers.Dense(1, activation='sigmoid')(x) 
+    model = keras.Model(inputs, outputs) 
+    model.compile( optimizer="rmsprop", loss="binary_crossentropy", metrics=["accuracy"])
+    
+    return model 
 
+model = getModel() 
+model.summary() 
+callbacks = [ 
+    keras.callbacks.ModelCheckpoint("binary_1gram.keras", save_best_only=True) 
+]
+#적절한 시점에서 파일 저장하기 
 
+#cache : 데이터셋을 메모리에 캐싱한다. 첫번재 에포크에서 전처리를 한번만 하고 더이상 하지 않고 재사용을 한다 
+#메모리에 들어갈 만큼 작은 데이터셋일때만 가능하다 
+model.fit(binary_1gram_train_ds.cache(), 
+          validation_data=binary_1gram_val_ds, 
+          epochs=10, 
+          callbacks=callbacks)
 
+model = models.load_model("binary_1gram.keras")  #학습한 내용 읽어보기 
+print("테스트셋 정확도 ", model.evaluate( binary_1gram_test_ds))
+ 
 
 
 
