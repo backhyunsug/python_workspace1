@@ -1,4 +1,19 @@
 #사전학습된 임베딩 계층을 이용한다. Glove 
+#설치해야 할 라이브러리 gensim 
+#conda install gensim 
+"""
+Word2Vec 다운받기
+Direct Link (S3 AWS):
+ https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz
+
+Hugging Face: 최근에는 Hugging Face datasets나 models에서도 찾아볼 수 있습니다.
+ 예를 들어, NathaNn1111/word2vec-google-news-negative-300-bin와 같은 저장소에서 다운로드 링크를 제공합니다.
+
+Kaggle: Kaggle에도 이 데이터셋이 업로드되어 있습니다.
+ GoogleNews-vectors-negative300.bin.gz를 검색하면 찾을 수 있습니다.
+ https://www.kaggle.com/datasets/leadbest/googlenewsvectorsnegative300
+
+"""
 import requests
 import subprocess
 import re
@@ -101,6 +116,23 @@ for item in int_train_ds:
     print(item)
     break 
 
+#Word23Vec 파일 불러오기 
+
+from gensim.models import KeyedVectors 
+filename = "./data/GoogleNews-vectors-negative300.bin"
+
+try:
+    word2vec_model = KeyedVectors.load_word2vec_format(filename, binary=True)
+    #파일이 txt형태가 있고 binary 형태가 있다. binary형태를 읽겠다
+    embedding_dim = word2vec_model.vector_size 
+except FileNotFoundError:
+    print(filename + "을 찾을 수 없습니다")
+    exit()#프로그램 종료
+except Exception as e :
+    print("에러발생 " + e)
+    exit()#프로그램 종료
+print("파일 로딩 성공")
+
 #임베딩층 - 내부적으로는 연산을 해서 단어와 단어사이의 관계를 계산해서 밀집벡터를 만든다. 
 #원핫인코딩 - 메모리를 너무 많이 차지함   최대한 한문장을 표현하는데 만일 최대 20000 단어까지 처리한다면 
 #한문장당 20000개가 필요 , 희소행렬 요소가 거의다 0인데 그중 몇개가 값이 있을때, 학습시 속도가 엄청 느리다 
@@ -109,24 +141,25 @@ for item in int_train_ds:
 #케라스가 Embedding 레이어를 제공한다. 이 레이어는  반드시 정수 인덱스를 받아야 한다. 시퀀스를 받아서 밀집벡터를 만든다 
 #알고리즘 공개안함. 파이썬은 소스 공개 안할 방법이 없다.   ProgramData\anaconda3\envs\가상환경\libs\site-packages    
 
-#사전학습된 임베딩 데이터를 불러온다
-import numpy as np 
-path_to_glove_file = "./data/glove.6B.100d.txt"
-#임베딩 데이터, 단어별 각 단어와의 거리가 벡터로 저장되어 있음  파일명의 100이 출력 벡터의 크기이다 
-embeddings_index = {}
-with open(path_to_glove_file, encoding="utf-8") as f:
-    for line in f: #한 라인씩 읽는다 
-        #단어, 단어들간의 벡터 구조로 되어 있다  예) the 0.0012 000172  ...... 
-        word, coefs = line.split(maxsplit=1)  
-        coefs = np.fromstring(coefs, "f", sep=" ") #나머지 벡터들을 numpy배열로 전환
-        embeddings_index[word]=coefs
-        #print( embeddings_index)
+# #사전학습된 임베딩 데이터를 불러온다
+# import numpy as np 
+# path_to_glove_file = "./data/glove.6B.100d.txt"
+# #임베딩 데이터, 단어별 각 단어와의 거리가 벡터로 저장되어 있음  파일명의 100이 출력 벡터의 크기이다 
+# embeddings_index = {}
+# with open(path_to_glove_file, encoding="utf-8") as f:
+#     for line in f: #한 라인씩 읽는다 
+#         #단어, 단어들간의 벡터 구조로 되어 있다  예) the 0.0012 000172  ...... 
+#         word, coefs = line.split(maxsplit=1)  
+#         coefs = np.fromstring(coefs, "f", sep=" ") #나머지 벡터들을 numpy배열로 전환
+#         embeddings_index[word]=coefs
+#         #print( embeddings_index)
          
-print("개수 ", len(embeddings_index))
-#print(embeddings_index) 
-#{"the":[ , , , , ,]}
+# # print("개수 ", len(embeddings_index))
+# # #print(embeddings_index) 
+# # #{"the":[ , , , , ,]}
 
 #우리데이터와 연동을 해야 한다 
+import numpy as np
 vocabulary = text_vectorization.get_vocabulary() #우리 어휘사전 가져오기
 #{단어:인덱스} 형태의 딕셔너리르 만들어야 한다 
 #{"", "[UNK]", "write", "love", "make",...........} vocaburary
@@ -144,7 +177,7 @@ embedding_matrix = np.zeros((max_tokens, embedding_dim))  # 20000 * 100 배열�
 for word, i in word_index.items(): 
     #단어와 인덱스를 가져온다 
     if i <max_tokens: #혹시나 20000개를 넘어가는 토큰이 있을까봐 오류처리
-        embedding_vector = embeddings_index.get(word) #단어에 해당하는 벡터들 이동 
+        embedding_vector = word2vec_model[word] #단어에 해당하는 벡터들 이동 
     if embedding_vector is not None: #embedding_vector값이 None인 경우를 제외하고 
         embedding_matrix[i] = embedding_vector
 
