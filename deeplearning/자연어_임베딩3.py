@@ -168,7 +168,6 @@ vocabulary = text_vectorization.get_vocabulary() #우리 어휘사전 가져오�
 #{"":0, "[UNK]":1, "write":2, ,,,,,,,}
 
 word_index = dict(zip(vocabulary, range(len(vocabulary)))) 
-embedding_dim = 100  #미리 학습한 임베딩층의 출력값이 100개임 
 embedding_matrix = np.zeros((max_tokens, embedding_dim))  # 20000 * 100 배열을 잡고 0으로 채운다 
 #케라스  Embedding 레이어에 초기값으로 쓰여야 한다.  
 #embedding_matrix 를 우리가 embedding_index 정보로 채워야 한다. 
@@ -177,10 +176,12 @@ embedding_matrix = np.zeros((max_tokens, embedding_dim))  # 20000 * 100 배열�
 for word, i in word_index.items(): 
     #단어와 인덱스를 가져온다 
     if i <max_tokens: #혹시나 20000개를 넘어가는 토큰이 있을까봐 오류처리
-        embedding_vector = word2vec_model[word] #단어에 해당하는 벡터들 이동 
-    if embedding_vector is not None: #embedding_vector값이 None인 경우를 제외하고 
-        embedding_matrix[i] = embedding_vector
-
+        try:
+            embedding_vector = word2vec_model[word] #단어에 해당하는 벡터들 이동
+            embedding_matrix[i] = embedding_vector
+        except KeyError:
+            pass  #건너뛰기만  
+    
 print( embedding_matrix[:10])
 
 
