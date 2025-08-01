@@ -153,12 +153,13 @@ print( embedding_matrix[:10])
 
 from keras import models, layers
 import tensorflow as tf 
- 
+import keras 
+
 inputs = keras.Input(shape=(None,), dtype="int64")
 embedded = layers.Embedding(
     input_dim = max_tokens, 
     output_dim=embedding_dim, 
-    embeddings_initializer=keras.initializers(embedding_matrix), ####반드시   
+    embeddings_initializer=keras.initializers.Constant(embedding_matrix), ####반드시   
     #사전학습된 층에 의해 바꿔치기가 이뤄져야 한다 
     trainable=False,  #임베딩가중치를 훈련중에 업데이트할거냐? 사전학습돈 임베딩층을 사용할때는 False로 지정해야 한다 
     mask_zero=True 
