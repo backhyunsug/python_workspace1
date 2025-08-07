@@ -171,7 +171,7 @@ secrets.json
 
 # Large dataset
 deeplearning/data/
-deeplearning/dogs-vs-cats
+deeplearning/dogs-vs-cats/
 korean_imdb/
 
 *.jpg
