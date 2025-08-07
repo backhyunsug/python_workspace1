@@ -169,22 +169,9 @@ secrets.json
 .env.local
 .env.production
 
-
-deeplearning/aclImdb/
-deeplearning/data/glove.6B.100d.txt
-deeplearning/data/r8-test-all-terms.txt
-deeplearning/data/r8-train-all-terms.txt
-deeplearning/aclImdb_v1.tar.gz
-deeplearning/data/cats_and_dogs/train/cat.0.jpg
-deeplearning/data/cats_and_dogs/train/cat.1.jpg
-deeplearning/data/cats_and_dogs/train/cat.10.jpg
-deeplearning/data/cats_and_dogs/train/cat.100.jpg
-deeplearning/data/cats_and_dogs/train/cat.100.jpg
-deeplearning/data/cats_and_dogs/train/cat.1000.jpg
-deeplearning/data/cats_and_dogs/train/cat.1001.jpg
-deeplearning/data/cats_and_dogs/train/cat.1002.jpg
-deeplearning/data/cats_and_dogs/train/cat.1003.jpg
-deeplearning/data/cats_and_dogs/train
+# Large dataset
+deeplearning/data/
+deeplearning/dogs-vs-cats
 korean_imdb/
 
 *.jpg
