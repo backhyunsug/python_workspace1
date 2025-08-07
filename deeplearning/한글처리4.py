@@ -157,7 +157,7 @@ val_ds_processed = val_ds_raw.map(tf_korean_preprocess_fn, num_parallel_calls=tf
 test_ds_processed = test_ds_raw.map(tf_korean_preprocess_fn, num_parallel_calls=tf.data.AUTOTUNE) 
 print('전처리 완료')
 
-#어휘사전 만들기
+   #어휘사전 만들기
 vectorizer.adapt(train_ds_processed.map(lambda x, y : x)) #x:text, y:label
 
 #실제 학습을 하려면 우리 데이터를 => 벡터화 시켜야 한다 
@@ -166,6 +166,7 @@ def vectorize_text_fn(texts, labels):
 
 def study():
 
+ 
     train_ds_vectorized = train_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
     val_ds_vectorized = val_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
     test_ds_vectorized = test_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
@@ -195,6 +196,7 @@ def study():
     voca_size = vectorizer.vocabulary_size() 
     embedding_dim = 128 #대충, 특별히 사전에 학습된 내용을 사용하는것이 아니면 차원을 마음대로 줄 수 있다 
     inputs = keras.Input(shape=(None,), dtype=tf.int64) #입력층 만들고 #?????????????????
+    
     x = layers.Embedding( 
         input_dim = voca_size, 
         output_dim=embedding_dim,  #???????????????????????
@@ -253,7 +255,7 @@ def predict():
         sentiment = "긍정 " if prob[i]>=0.5 else "부정"
         print(text[:40], "===> ", sentiment, prob[i])
 
-
+predict()
 
 
 

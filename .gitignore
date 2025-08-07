@@ -177,3 +177,5 @@ korean_imdb/
 *.jpg
 *.txt
 *.txt
+deeplearning/cc.ko.300.vec
+deeplearning/cc.ko.300.vec
