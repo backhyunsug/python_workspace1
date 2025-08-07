@@ -192,11 +192,12 @@ print("준비작업완료")
 
 voca_size = vectorizer.vocabulary_size() 
 embedding_dim = 128 #대충, 특별히 사전에 학습된 내용을 사용하는것이 아니면 차원을 마음대로 줄 수 있다 
-inputs = keras.Input(shape=(None,), dtype=tf.int64) #입력층 만들고 
+inputs = keras.Input(shape=(None,), dtype=tf.int64) #입력층 만들고 #?????????????????
 x = layers.Embedding( 
     input_dim = voca_size, 
+    output_dim=embedding_dim,  #???????????????????????
     #embedding_initialize은 기본적으로 uniform(랜덤)으로 초기화 학습된 모델을 사용하려면 이 값을 지정해야한다. 
-    mask_zeof=True
+    mask_zero=True  #??????????????????????
 )(inputs)   
 x = layers.Bidirectional(layers.LSTM(32))(x) #순환신경망 
 x = layers.Dropout(0.5)(x) 
