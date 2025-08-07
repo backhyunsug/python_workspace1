@@ -164,65 +164,95 @@ vectorizer.adapt(train_ds_processed.map(lambda x, y : x)) #x:text, y:label
 def vectorize_text_fn(texts, labels):
     return vectorizer(texts), labels #벡터화 해서 반환한다 
 
-train_ds_vectorized = train_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
-val_ds_vectorized = val_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
-test_ds_vectorized = test_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
+def study():
 
-#데이터셋이 사용하게 cpu임 - 캐쉬랑 프리패치 
-train_ds_vectorized = train_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
-val_ds_vectorized = val_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
-test_ds_vectorized = test_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
+    train_ds_vectorized = train_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
+    val_ds_vectorized = val_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
+    test_ds_vectorized = test_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
 
-#결과확인 
-print(vectorizer.get_vocabulary()[:20])
-for text_batch, label_batch in train_ds_vectorized.take(1): #한 사이클만 가져와서 
-    print(text_batch.shape) 
-    print(label_batch.shape)
-    print(text_batch[0, :10].numpy())
+    #데이터셋이 사용하게 cpu임 - 캐쉬랑 프리패치 
+    train_ds_vectorized = train_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
+    val_ds_vectorized = val_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
+    test_ds_vectorized = test_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
 
-    #역변환하여 확인해보자 
-    vocabulary = vectorizer.get_vocabulary() 
-    decoded = " ".join(vocabulary[idx] for idx in  text_batch[0, :10].numpy() if idx>1)
-    print(decoded)
+    #결과확인 
+    print(vectorizer.get_vocabulary()[:20])
+    for text_batch, label_batch in train_ds_vectorized.take(1): #한 사이클만 가져와서 
+        print(text_batch.shape) 
+        print(label_batch.shape)
+        print(text_batch[0, :10].numpy())
 
-print("준비작업완료")
+        #역변환하여 확인해보자 
+        vocabulary = vectorizer.get_vocabulary() 
+        decoded = " ".join(vocabulary[idx] for idx in  text_batch[0, :10].numpy() if idx>1)
+        print(decoded)
 
-##################  딥러닝 : Embedding(밀집벡터) -> 단어와 단어사이의 거리를 표현한다 
-#################           원핫인코딩 - 희소행렬, 차원이 너무 거대하다 
+    print("준비작업완료")
 
-voca_size = vectorizer.vocabulary_size() 
-embedding_dim = 128 #대충, 특별히 사전에 학습된 내용을 사용하는것이 아니면 차원을 마음대로 줄 수 있다 
-inputs = keras.Input(shape=(None,), dtype=tf.int64) #입력층 만들고 #?????????????????
-x = layers.Embedding( 
-    input_dim = voca_size, 
-    output_dim=embedding_dim,  #???????????????????????
-    #embedding_initialize은 기본적으로 uniform(랜덤)으로 초기화 학습된 모델을 사용하려면 이 값을 지정해야한다. 
-    mask_zero=True  #??????????????????????
-)(inputs)   
-x = layers.Bidirectional(layers.LSTM(32))(x) #순환신경망 
-x = layers.Dropout(0.5)(x) 
-outputs = layers.Dense(1, activation='sigmoid')(x) #이진분류라서 
-model = keras.Model(inputs, outputs)
+    ##################  딥러닝 : Embedding(밀집벡터) -> 단어와 단어사이의 거리를 표현한다 
+    #################           원핫인코딩 - 희소행렬, 차원이 너무 거대하다 
 
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+    voca_size = vectorizer.vocabulary_size() 
+    embedding_dim = 128 #대충, 특별히 사전에 학습된 내용을 사용하는것이 아니면 차원을 마음대로 줄 수 있다 
+    inputs = keras.Input(shape=(None,), dtype=tf.int64) #입력층 만들고 #?????????????????
+    x = layers.Embedding( 
+        input_dim = voca_size, 
+        output_dim=embedding_dim,  #???????????????????????
+        #embedding_initialize은 기본적으로 uniform(랜덤)으로 초기화 학습된 모델을 사용하려면 이 값을 지정해야한다. 
+        mask_zero=True  #??????????????????????
+    )(inputs)   
+    x = layers.Bidirectional(layers.LSTM(32))(x) #순환신경망 
+    x = layers.Dropout(0.5)(x) 
+    outputs = layers.Dense(1, activation='sigmoid')(x) #이진분류라서 
+    model = keras.Model(inputs, outputs)
 
-model.summary()
-callbacks = [
-    keras.callbacks.ModelCheckpoint("korean_rnn_model.keras",
-                                    save_best_only=True,
-                                    monitor='val_accuracy',
-                                    mode='max')
-]
+    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+
+    model.summary()
+    callbacks = [
+        keras.callbacks.ModelCheckpoint("korean_rnn_model.keras",
+                                        save_best_only=True,
+                                        monitor='val_accuracy',
+                                        mode='max')
+    ]
+
+    import pickle 
+    print("\n모델 훈련 시작...")
+    history = model.fit(train_ds_vectorized,
+                        validation_data=val_ds_vectorized,
+                        epochs=5,
+                        callbacks=callbacks)
+    with open("korean_rnn_history", "wb") as f:
+        pickle.dump(history.history, f)
+    print("완료")
 
 import pickle 
-print("\n모델 훈련 시작...")
-history = model.fit(train_ds_vectorized,
-                    validation_data=val_ds_vectorized,
-                    epochs=5,
-                    callbacks=callbacks)
-with open("korean_rnn_history", "wb") as f:
-    pickle.dump(history.history, f)
-print("완료")
+def predict():
+    model = keras.models.load_model("korean_rnn_model.keras")
+    with open("korean_rnn_history", "rb") as f:
+        history = pickle.load(f)
+
+    sample = [
+        "이 영화는 정말 감동적이었어요", 
+        "영화 수준이 좀 초등학생용 같아요",
+        "개연성도 없고 시나리오 발로 썼냐", 
+        "반드시 봐야할 영화입니다. 인생을 풍요롭게 하는 영화였어요",
+        "배우 하나로 이런 영화가 만들어질수 있다는게 믿기지 않습니다"
+    ]
+    
+    #샘플도 클린하게 
+    processed_sample = [
+        " ".join(okt.morphs(clean_text(text.encode('utf-8')))) for text in sample 
+    ]
+
+    vectorize_sample = vectorizer(tf.constant(processed_sample, dtype=tf.string))
+    prediction = model.predict(vectorize_sample)
+    #확률
+    prob = prediction.flatten() 
+    for i, text in enumerate(sample):
+        sentiment = "긍정 " if prob[i]>=0.5 else "부정"
+        print(text[:40], "===> ", sentiment, prob[i])
+
 
 
 
