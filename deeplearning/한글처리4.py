@@ -187,9 +187,41 @@ for text_batch, label_batch in train_ds_vectorized.take(1): #한 사이클만 �
 
 print("준비작업완료")
 
+##################  딥러닝 : Embedding(밀집벡터) -> 단어와 단어사이의 거리를 표현한다 
+#################           원핫인코딩 - 희소행렬, 차원이 너무 거대하다 
 
+voca_size = vectorizer.vocabulary_size() 
+embedding_dim = 128 #대충, 특별히 사전에 학습된 내용을 사용하는것이 아니면 차원을 마음대로 줄 수 있다 
+inputs = keras.Input(shape=(None,), dtype=tf.iont64) #입력층 만들고 
+x = layers.Embedding( 
+    input_dim = voca_size, 
+    #embedding_initialize은 기본적으로 uniform(랜덤)으로 초기화 학습된 모델을 사용하려면 이 값을 지정해야한다. 
+    mask_zeof=True
+)(inputs)   
+x = layers.Bidirectional(layers.LSTM(32))(x) #순환신경망 
+x = layers.Dropout(0.5)(x) 
+outputs = layers.Dense(1, activation='sigmoid')(x) #이진분류라서 
+model = keras.Model(inputs, outputs)
 
+model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
 
+model.summary()
+callbacks = [
+    keras.callbacks.ModelCheckpoint("korean_rnn_model.keras",
+                                    save_best_only=True,
+                                    monitor='val_accuracy',
+                                    mode='max')
+]
+
+import pickle 
+print("\n모델 훈련 시작...")
+history = model.fit(train_ds_vectorized,
+                    validation_data=val_ds_vectorized,
+                    epochs=5,
+                    callbacks=callbacks)
+with open("korean_rnn_history", "wb") as f:
+    pickle.dump(history.history, f)
+print("완료")
 
 
 
