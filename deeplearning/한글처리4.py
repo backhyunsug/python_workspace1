@@ -87,11 +87,11 @@ korean_data_dir = "korean_imdb"
 #2.데이터셋 로드 및 초기화
 #kers.utils.text_dataset_from_dircotry를 사용한다, 데이터를 읽어올 준비, 과정설정   
 batch_size=32 
-train_ds_raw = keras.utils.dataset_from_dirctory(
+train_ds_raw = keras.utils.text_dataset_from_directory(
     korean_data_dir + "/train", batch_size=batch_size, label_mode="binary") 
-val_ds_raw = keras.utils.dataset_from_dirctory(
+val_ds_raw = keras.utils.text_dataset_from_directory(
     korean_data_dir + "/val", batch_size=batch_size, label_mode="binary") 
-test_ds_raw = keras.utils.dataset_from_dirctory(
+test_ds_raw = keras.utils.text_dataset_from_directory(
     korean_data_dir + "/test", batch_size=batch_size, label_mode="binary") 
 
 ################### 한글이나 비영어권국가들 ###################################
@@ -127,7 +127,7 @@ def python_korean_preprocess(text_tensor):#매개변수의 타입이 tf.tensor�
  
 def tf_korean_preprocess_fn(texts, labels):
     # tf.py_function 이 함수가 하는일이 Python 함수를 Tensorflow에 끼워넣는다 
-    processed_texts = tf.py_func( 
+    processed_texts = tf.py_function( 
         func = python_korean_preprocess, #전달할 함수 
         inp=[texts], #입력데이터 
         Tout=tf.string  #출력형태
@@ -143,7 +143,7 @@ vectorizer = TextVectorization(
     max_tokens = max_tokens,
     output_mode = "int", #반드시 시퀀스를 보내야 함 꼭 int만 가능하다
     output_sequence_length = output_sequence,
-    standarize=None, #따로 표준화를 진행함 
+    standardize=None, #따로 표준화를 진행함 
     split="whitespace"   #토큰을 공백을 기준으로 분리한다 
 )
 
@@ -152,9 +152,9 @@ vectorizer = TextVectorization(
 #texts, lables 가 있을때 각 요소를 하나씩 전달 후 연산을 수행해서 반환한다 
 #모든 요소에 tf_korean_preprocess_fn 함수를 호출해라 
 #num_paralle_calls=tf.data.AUTOTUNE : 시스템 상태에 따른 적당한 병행처리, 직접 개수를 지정할 수 도 있다  
-train_ds_processed = train_ds_raw.map(tf_korean_preprocess_fn, num_paralle_calls=tf.data.AUTOTUNE) 
-val_ds_processed = val_ds_raw.map(tf_korean_preprocess_fn, num_paralle_calls=tf.data.AUTOTUNE) 
-test_ds_processed = test_ds_raw.map(tf_korean_preprocess_fn, num_paralle_calls=tf.data.AUTOTUNE) 
+train_ds_processed = train_ds_raw.map(tf_korean_preprocess_fn, num_parallel_calls=tf.data.AUTOTUNE) 
+val_ds_processed = val_ds_raw.map(tf_korean_preprocess_fn, num_parallel_calls=tf.data.AUTOTUNE) 
+test_ds_processed = test_ds_raw.map(tf_korean_preprocess_fn, num_parallel_calls=tf.data.AUTOTUNE) 
 print('전처리 완료')
 
 #어휘사전 만들기
@@ -164,14 +164,28 @@ vectorizer.adapt(train_ds_processed.map(lambda x, y : x)) #x:text, y:label
 def vectorize_text_fn(texts, labels):
     return vectorizer(texts), labels #벡터화 해서 반환한다 
 
-train_ds_vectorized = train_ds_processed.map(vectorize_text_fn, num_paralle_calls=tf.data.AUTOTUNE)
-val_ds_vectorized = val_ds_processed.map(vectorize_text_fn, num_paralle_calls=tf.data.AUTOTUNE)
-test_ds_vectorized = test_ds_processed.map(vectorize_text_fn, num_paralle_calls=tf.data.AUTOTUNE)
+train_ds_vectorized = train_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
+val_ds_vectorized = val_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
+test_ds_vectorized = test_ds_processed.map(vectorize_text_fn, num_parallel_calls=tf.data.AUTOTUNE)
 
 #데이터셋이 사용하게 cpu임 - 캐쉬랑 프리패치 
 train_ds_vectorized = train_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
 val_ds_vectorized = val_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
 test_ds_vectorized = test_ds_vectorized.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
+
+#결과확인 
+print(vectorizer.get_vocabulary()[:20])
+for text_batch, label_batch in train_ds_vectorized.take(1): #한 사이클만 가져와서 
+    print(text_batch.shape) 
+    print(label_batch.shape)
+    print(text_batch[0, :10].numpy())
+
+    #역변환하여 확인해보자 
+    vocabulary = vectorizer.get_vocabulary() 
+    decoded = " ".join(vocabulary[idx] for idx in  text_batch[0, :10].numpy() if idx>1)
+    print(decoded)
+
+print("준비작업완료")
 
 
 
