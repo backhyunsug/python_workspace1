@@ -1,0 +1,44 @@
+# Ensure consistent line endings for HTML files
+*.html text eol=lf
+*.htm text eol=lf
+
+# Handle other web files consistently  
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+
+# Ensure Python files have consistent line endings
+*.py text eol=lf
+
+# Binary files should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+ 
+# -------------------------------
+# GitHub Linguist configuration
+# Prevent HTML/CSS/JS and other frontend assets from inflating language stats
+# -------------------------------
+
+# Treat project-level frontend samples as vendored
+프론트엔드/** linguist-vendored
+프론트엔드/**/*.min.* linguist-generated
+
+# Django templates and static assets
+Django/**/templates/** linguist-documentation
+Django/**/static/** linguist-vendored
+
+# Generic web assets
+*.min.js linguist-generated
+*.min.css linguist-generated
+*.map linguist-generated
+
+# De-emphasize common web files in language statistics
+*.html linguist-detectable=false
+*.htm linguist-detectable=false
+*.css linguist-detectable=false
+*.js linguist-detectable=false
+*.json linguist-detectable=false
