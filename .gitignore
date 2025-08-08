@@ -173,6 +173,7 @@ secrets.json
 deeplearning/data/
 deeplearning/dogs-vs-cats/
 korean_imdb/
+korean_rnn_history
 
 *.jpg
 *.txt
