@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!-- 모든 출력은 root 아이디 안에 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        let rootNode = document.getElementById("root"); 
+        //ReactDOM 라이브러리와 위에 있는 div태그랑 연동하고 모든 코드는 React.StrictMode에 
+        ReactDOM.createRoot(rootNode).render(
+            <React.StrictMode>
+                <h1>Hello React</h1>
+                <Counter/>
+                <Counter/>
+            </React.StrictMode>
+        )
+
+        function Counter(){
+            const [number, setNumber] = React.useState(0);
+            const increase = ()=>{
+                setNumber(number+1);
+            }
+            const decrease = ()=>{
+                setNumber(number-1);
+            }
+
+            return (
+                <div>
+                    <h2>{number}</h2> 
+                    <button type="button" onClick={increase}>+</button>
+                    <button type="button" onClick={decrease}>-</button>
+                </div>
+            )
+        }
+
+        
+    </script>
+</body>
+</html>

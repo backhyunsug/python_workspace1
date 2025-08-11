@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!-- 모든 출력은 root 아이디 안에 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        let rootNode = document.getElementById("root"); 
+        //ReactDOM 라이브러리와 위에 있는 div태그랑 연동하고 모든 코드는 React.StrictMode에 
+        ReactDOM.createRoot(rootNode).render(
+            <React.StrictMode>
+                <h1>Hello React</h1>
+                <Calculator/>
+            </React.StrictMode>
+        )
+        //input태그랑 state 연동하기
+
+        function Calculator(){
+            const [x, setX] = React.useState(0);
+            const [y, setY] = React.useState(0);
+            const [result, setResult] = React.useState(0);
+            
+            const add = ()=> {
+                setResult(parseInt(x) + parseInt(y))
+            }
+            const sub = ()=> {
+                setResult(parseInt(x) - parseInt(y))
+            }
+
+            function xChange(e){
+                //함수-이벤트핸들러:이벤트에 반응해서 호출될 함수들 
+                //이벤트가 발생하면 함수의 매개변수 이벤트 객체를 전달해 준다 
+                console.log(e); //e.target - 이벤트를 발생시킨 객체 정보가 들어온다  
+                setX(e.target.value); 
+            }
+
+            function yChange(e){
+                console.log(e.target.value);
+                setY(e.target.value); 
+            }
+
+            return(
+                <div>
+                    x : <input type="text" onChange={xChange} /> <br/>
+                    y : <input type="text" onChange={yChange} /> <br/>
+                    <h1>{result}</h1> 
+                    <p>{x} {y} </p>
+                    <button type="button" onClick={add}>+</button>
+                    <button type="button" onClick={sub}>-</button>
+                </div>
+            )
+        }
+    </script>
+</body>
+</html>
+
+<!--이름,국어,영어,수학 입려받고  총점 평균출력하는 컴포넌트 Score 컴포넌트 만들기  -->

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!-- 모든 출력은 root 아이디 안에 -->
+    <div id="root"></div>
+    <!-- props 를 통해서 자식컴포넌트한테 값을 보낸다. 값을 보내는것만(받아오지는 못한다 )
+         부모 ==> 자식  키=값의 형태로 전송한다. 받는쪽에서는 props.키 
+         부모가 함수도 자식한테 보낼 수 있다. 자식입장에서는 부모한테 무슨일을 알리고 싶으면 
+         부모함수를 호출한다. 
+         데이터는 위에서 아래로 흐르고 이벤트는 아래에서 위로 흐른다 
+        <부모컴포넌트>
+            <자식컴포넌트1 msg="안녕하세요"/>
+            <자식컴포넌트2 msg="Hello"/>
+        <부모컴포넌트/>
+
+   -->
+    <script type="text/babel">
+        let rootNode = document.getElementById("root"); 
+        //ReactDOM 라이브러리와 위에 있는 div태그랑 연동하고 모든 코드는 React.StrictMode에 
+        ReactDOM.createRoot(rootNode).render(
+            <React.StrictMode>
+                <h1>Hello React</h1>
+                <App title="제목1" contents="내용1" />
+                <App2 title="제목2" contents="내용2" />
+            </React.StrictMode>
+        )
+
+        //function App(props){
+        function App(props){
+            //props로 부모가 보낸 값을 받아 올 수 있다 
+            return(
+                <div>
+                    <h1>{props.title}</h1>
+                    <h1>{props.contents}</h1>
+                </div>
+            
+            )
+        }
+
+        //const {title, contents} = props; 
+        function App2({title, contents}){
+            return(
+                <div>
+                    <h1>{title}</h1>
+                    <h1>{contents}</h1>
+                </div>
+
+            ) 
+        }
+
+    </script>
+</body>
+</html>

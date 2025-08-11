@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!-- 모든 출력은 root 아이디 안에 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        let rootNode = document.getElementById("root"); 
+        //ReactDOM 라이브러리와 위에 있는 div태그랑 연동하고 모든 코드는 React.StrictMode에 
+        ReactDOM.createRoot(rootNode).render(
+            <React.StrictMode>
+                <h1>Hello React</h1>
+                <Calculator/>
+            </React.StrictMode>
+        )
+        //input태그랑 state 연동하기
+        //컴포넌트를 쪼갠다. 
+        //MainComponent ==> 목록, 목록에 추가되는함수  
+        //ScoreInput ===> 입력을 담당 
+        //ScoreOutput ===>  출력을 담당      
+        //형제간에 데이터든 이벤트든 못 주고 받는다. 
+        //너무 많이 오고 가다보면, 시작도 모르겠고 끝도 모름 
+        //완전히 분리시켜서 이걸 별도로 관리 - redux 라고 한다(스토어)     
+        function ScoreInput(){
+            const [name, setName] = React.useState("");
+            const [kor, setKor] = React.useState(0);
+            const [eng, setEng] = React.useState(0);
+            const [mat, setMat] = React.useState(0);
+            const [result, setResult] = React.useState("");
+            
+            const process = ()=> {
+                let total = parseInt(kor) + parseInt(eng) + parseInt(mat);
+                let avg = total/3; 
+                setResult(`${name} 의 총점은 ${total} 이고 평균은 ${avg} 입니다`)
+            }
+            
+            function nameChange(e){
+                setName(e.target.value); 
+            }
+            function korChange(e){
+                setKor(e.target.value); 
+            }
+            function engChange(e){
+                setEng(e.target.value); 
+            }
+            function matChange(e){
+                setMat(e.target.value); 
+            }
+
+            function clear(){
+                setName("");
+                setKor(0);
+                setEng(0);
+                setMat(0);
+                setResult("");
+            }
+
+            return(
+                <div>
+                    이름 : <input type="text" onChange={nameChange} /> <br/>
+                    국어 : <input type="text" onChange={korChange} /> <br/>
+                    영어 : <input type="text" onChange={engChange} /> <br/>
+                    수학 : <input type="text" onChange={matChange} /> <br/>
+                    <h1>{result}</h1> 
+                    <button type="button" onClick={process}>확인</button>
+                    <button type="button" onClick={clear}>리셋</button>
+                </div>
+            )
+        }
+
+        function ScoreOutput({scoreList}){
+            return(
+                <table>
+                    {
+                        scoreList.map( (obj, i)=>{
+                            return(
+                                <tr key={i}>
+                                    <td>{obj.name}</td>
+                                    <td>{obj.kor}</td>
+                                    <td>{obj.eng}</td>
+                                    <td>{obj.mat}</td>
+                                    <td>{obj.result}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                </table>
+            )
+        }
+    </script>
+</body>
+</html>
+
+<!--이름,국어,영어,수학 입려받고  총점 평균출력하는 컴포넌트 Score 컴포넌트 만들기  -->

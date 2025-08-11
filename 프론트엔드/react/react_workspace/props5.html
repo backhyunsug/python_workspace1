@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!-- 모든 출력은 root 아이디 안에 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        let rootNode = document.getElementById("root"); 
+        //ReactDOM 라이브러리와 위에 있는 div태그랑 연동하고 모든 코드는 React.StrictMode에 
+        ReactDOM.createRoot(rootNode).render(
+            <React.StrictMode>
+                <h1>Hello React</h1>
+                <App/>
+            </React.StrictMode>
+        )
+
+        function App(){
+            const [arr, setArr] =React.useState(["자두", "살구", "앵두"]);
+            const [fruit, setFruit] = React.useState("");
+            const focusMove=React.useRef(null);  //포커스처리용 
+            
+            const fruitChange =(e)=>{ setFruit(e.target.value) }
+            const append=()=>{
+                console.log("추가");
+                //원래 배열에는 추가가 push 함수- 이거 쓰면 안된다. 
+                //전개나 concat 함수 
+                //기존의 배열을 사용하는 push는 안되고, 새로 배열을 만들어서 바꿔치기를 거쳐야 한다 
+                //어찌되었던 push는 사용못한다. 
+                //setArr([...arr, fruit]) //앞의 배열에 추가하기 - 전개
+                if (fruit!="")
+                {
+                    setArr(arr.concat(fruit));
+                    setFruit("");
+                }
+            }
+            
+            return( 
+                <div>
+                    <h1>배열처리</h1>
+                    과일 : <input type="text" ref={focusMove} value={fruit}
+                        onChange={fruitChange} /> <br/>
+                    <button type="button" onClick={append}>추가</button>
+                    <hr/> 
+                    {/* 주석
+                        if나 for는 사용불가함 
+                        map ( (obj, index)=> 반환 하는 람다)
+                    */}
+                    <ul>
+                        {
+                            arr.map(  (item, index)=>{
+                                return(
+                                    <li key={index}>{item}</li>
+                                ) 
+                            })
+                        } 
+                    </ul>
+                </div>
+            )
+
+
+
+
+
+        }
+    </script>
+</body>
+</html>

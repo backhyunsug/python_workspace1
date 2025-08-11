@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!-- 모든 출력은 root 아이디 안에 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        let rootNode = document.getElementById("root"); 
+
+        let name="홍길동";
+        let age = 23;
+        //변수를 통해 스타일을 주고 싶으면 객체로 넘겨야 한다 
+        //font-size :스네이크표기법 => 카멜표기법 fontSize
+        let mystyle={"color":"blue", "fontSize":"30pt"}
+        
+        //ReactDOM 라이브러리와 위에 있는 div태그랑 연동하고 모든 코드는 React.StrictMode에 
+        ReactDOM.createRoot(rootNode).render(
+            <React.StrictMode>
+                <div>
+                    <h1 style={mystyle}>이름 : {name}</h1>
+                    <h1 style={{"color":"pink", "backgroundColor":"green"}}>나이 : {age}</h1>
+                </div>
+            </React.StrictMode>
+        )
+    </script>
+</body>
+</html>

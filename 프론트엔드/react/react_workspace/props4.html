@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+      let rootNode= document.getElementById("root");
+     
+      ReactDOM.createRoot(rootNode).render(
+          <React.StrictMode>  
+            <App  />
+          </React.StrictMode>,
+      );
+
+      //부모컴포넌트의 함수를 자식컴포넌트에 전달하기 
+      //데이터는 위에서 아래로
+      //함수는 아래에서 위로 
+      
+
+    function App({title, contents}) {
+        const [result, setResult]=React.useState(0);
+        //자식 컴포넌트에서 부모쪽에 값을 보낼 수 있다 
+        const calc = (oper, x, y)=>{
+            switch(oper)
+            {
+                case '1': setResult(x+y); break;
+                case '2': setResult(x-y); break;
+                case '3': setResult(x*y); break;
+                case '4': setResult((x/y).toFixed(0)); break;
+            }
+        }
+
+        return(
+            <div>
+                <h1>결과 : {result}</h1>
+                <AddSub  func={calc}/>
+            </div>
+        )
+    }
+
+    function AddSub(props) {
+        const [x, setX]=React.useState(5);
+        const [y, setY]=React.useState(15);
+        
+        const xChange = (e)=>{ setX(e.target.value);     }
+        const yChange = (e)=>{ setY(e.target.value);     }
+
+        //부모함수주소만 주면 안된다. 매개변수를 부모함수로 전달해야 한다 
+        return(
+            <div>
+                <h1>부모함수에 매개변수 전달하기</h1>
+                x : <input type="text" name="" id="" value={x} onChange={xChange}/><br/>
+                y : <input type="text" name="" id="" value={y} onChange={yChange}/><br/>
+                
+                <button type="button" onClick={()=>(props.func('1', x, y)) }>+</button>
+                <button type="button" onClick={()=>(props.func('2', x, y)) }>-</button>
+                <button type="button" onClick={()=>(props.func('3', x, y)) }>x</button>
+                <button type="button" onClick={()=>(props.func('4', x, y)) }>/</button>
+            </div>
+        )
+      }
+
+      
+    </script>
+
+</body>
+</html>
+
