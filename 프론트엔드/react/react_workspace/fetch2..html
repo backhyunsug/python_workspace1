@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <!-- 모든 출력은 root 아이디 안에 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        let rootNode = document.getElementById("root"); 
+        //ReactDOM 라이브러리와 위에 있는 div태그랑 연동하고 모든 코드는 React.StrictMode에 
+        ReactDOM.createRoot(rootNode).render(
+            <React.StrictMode>
+                <h1>useEffect</h1>
+                <App/>
+            </React.StrictMode>
+        )
+
+        //ajax로 백앤드 서버로부터 데이터불러오기
+        //mock서버 jsonplaceholder사이트, json서버라는 프로그램을 가동시키고, json파일을 만들어서 
+        //던져주면 백앤드 서버처럼 동작을 한다.  
+        //https://jsonplaceholder.typicode.com/ 
+        //https://axios-http.com/docs/intro
+        
+        function App(){
+            const [userList, setUserList] = React.useState([]);
+            const [isLoading, setIsLoading] = React.useState(true); 
+          
+            async function loadData(){
+                setIsLoading(true);
+                //fetch가 되었던 axios가 되었던 비동기 통신임 => 동기 통신으로 바꾸고 싶을때가 있음 
+                //비동기로 데이터를 받으면 반드시 then구문에서 처리를 해야 한다. 
+                //반환값을 사용하고자 할때 
+                let url = "https://jsonplaceholder.typicode.com/users";
+                let result = await axios.get(url);
+                setUserList(result.data);  //axios가 데이터 받아올때 data항목에 담아온다 
+                     //데이터 수신완료 
+                setIsLoading(false);
+            }
+
+            //window.onload=> DOM 구조가 다 완성되고나면 이 이벤트가 발생한다.  => $(document),.ready 
+            //useEffect라는 훅을 쓴다.  =>  onload - didmount  onunload-unmount, 화면이 refresh 되어야 할때 3번 호출된다. 
+            //두개의 매개변수, 전체 DOM에 무슨일이 벌어지면 호출될 함수 첫번째매개변수, 두번째 매개변수는 내가 감시할 대상  
+            React.useEffect(()=>{
+                loadData(); //반드시 처음에 호출된다. 
+            }, [])
+
+
+            //return구문안에 들어가는 문장들이 jsx문법이고 여기서는 if나 for문 같은거 못쓴다
+            return(
+                <div>
+                    {
+                        isLoading?
+                            <p>데이터 로딩중</p>:
+                        <ul>
+                        {
+                            userList.map( (item, i)=>{
+                                return(
+                                    <li key={i}>{item.id} {item.name} {item.username} {item.email}</li>
+                                ) 
+                            })
+                        }
+                        </ul>
+                    }
+                </div>
+            )
+        }
+    </script>
+</body>
+</html>
