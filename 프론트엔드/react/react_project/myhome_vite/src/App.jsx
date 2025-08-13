@@ -14,7 +14,7 @@ import ScoreWrite from './components/score/score_write';
 
 function App() {
   const [count, setCount] = useState(0)
-
+  
   return (
     <div className='container-fluid'>
       <nav style={{display:"flex", gap:"1rem", marginBottom:"1rem"}}>
