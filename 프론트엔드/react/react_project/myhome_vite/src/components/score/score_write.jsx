@@ -21,7 +21,7 @@ function ScoreWrite(){
     const onSubmit=(e)=>{
         e.preventDefault();  //서버로 전송되는 원래 기능을 막아야하 한다. 
  
-        axios.post("http://127.0.0.1:8000/score/insert", score)
+        axios.post("http://127.0.0.1:8000/score/score/insert", score)
         .then((res)=>{
             //alert("등록성공");
             history('/score/list');

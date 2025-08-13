@@ -21,4 +21,19 @@ def board_list():
         results = db_mgr.executeAll(sql)
     return {"list":results}
 
+from fastapi import Body
+import sqlalchemy 
+@router.post("/insert")
+def board_insert(title:str=Body(...), writer:str=Body(...), contents:str=Body(...)):
+    sql = """
+        insert into tb_board (title, writer,contents, wdate, hit)
+        value(:title,  :writer, :contents, now(), 0)
+    """
+    params = [{"title":title, "writer":writer, "contents":contents}]
+    try:
+        with Database() as db_mgr:
+            db_mgr.execute(sql, params)
+        return {"msg":"등록성공"}
+    except sqlalchemy.exc.SQLAlchemy as e:
+        return {"msg":"데이터 등록실패"}
 

@@ -9,7 +9,7 @@ function ScoreList(){
     const loadData=()=>{
         setIsLoading(true);
         //setScoreList([...scoreList, {"name":"홍길동", "kor":90, "eng":90, "mat":90}]);
-        axios.get("http://127.0.0.1:8000/scoreList")
+        axios.get("http://127.0.0.1:8000/score/scoreList")
         .then( (res)=>{
             setScoreList( res.data.scoreList);
         })

@@ -11,6 +11,8 @@ import About from "./pages/about"; //확장자 생략
 import Nomatch from "./pages/nomatch"; //확장자 생략
 import ScoreList from './components/score/score_list';
 import ScoreWrite from './components/score/score_write';
+import BoardList from './components/board/board_list';
+import BoardWrite from './components/board/board_write';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +24,7 @@ function App() {
         <Link to="/about">About</Link>
         <Link to="/counter">Counter</Link>
         <Link to="/score/list">성적처리</Link>
+        <Link to="/board/list">게시판</Link>
       </nav>
 
       {/* Routes - 경로  url ->특정컴포넌트와 연결하는 작업*/}
@@ -31,6 +34,8 @@ function App() {
         <Route path="/counter" element={<Counter/>} />
         <Route path="/score/list" element={<ScoreList/>} />
         <Route path="/score/insert" element={<ScoreWrite/>} />
+        <Route path="/board/list"   element={<BoardList/>} />
+        <Route path="/board/insert"   element={<BoardWrite/>} />
         <Route path="*" element={<Nomatch/>} />
       </Routes>
       { /*url을 바꾸면 컴포넌트가 출력될 위치*/}
