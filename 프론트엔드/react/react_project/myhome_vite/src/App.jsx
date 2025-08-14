@@ -39,8 +39,6 @@ function App() {
         <Route path="*" element={<Nomatch/>} />
       </Routes>
       { /*url을 바꾸면 컴포넌트가 출력될 위치*/}
-
-
     
       <Outlet/>
     </div>
