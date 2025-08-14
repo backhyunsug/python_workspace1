@@ -47,6 +47,9 @@ def board_insert(
     contents:str = Form(...),
     settings:dict = Depends(get_settings)
 ):
+    temp_filename=""
+    temp_image_url=""
+
     #파일이 업로드 먼저 처리하기 
     if filename and filename.filename: 
         file_location = os.path.join(settings["UPLOAD_DIRECTORY"], 
@@ -57,11 +60,24 @@ def board_insert(
         #안된다. 용량확인도 해줘야 하는데  copyfileobj 를 통해서 서버폴더에 저장함
         with open(file_location, "wb") as buffer:
             shutil.copyfileobj(filename.file, buffer)
-        
+        temp_filename=filename.filename 
+        temp_image_url = "static/" + filename.filename
+
         file_response = f'파일 {filename.filename} 가 업로드되었습니다'
     else:
         file_response = "파일이 첨부되지 않았습니다."
-    return {"msg":file_response}
+    
+    sql = """
+      insert into tb_board (title, writer, contents, filename, image_url,
+      wdate, hit) values(:title, :writer, :contents, :filename, :image_url,
+      now(), 0)
+      """
+    with Database() as db_mgr:
+        data =[{"title":title, "writer":writer, "contents":contents, 
+                "filename":temp_filename, "image_url":temp_image_url}]
+        db_mgr.execute(sql, data)
+
+    return {"msg":"등록성공"}
 
 
 
