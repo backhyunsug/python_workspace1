@@ -6,6 +6,9 @@ import './App.css'
 
 import Home from './pages/home'
 import Board from './pages/board'
+import BoardWrite from './pages/board_write'
+import BoardView from './pages/board_view'
+
 import Head from'./components/head'
 import {Routes, Route, Link, Outlet} from 'react-router-dom'
 
@@ -19,6 +22,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/board" element={<Board/>} />
+        <Route path="/board/write" element={<BoardWrite/>} />
+        <Route path="/board/view/:id" element={<BoardView />} />
+        { /* /board/view/:id -> useParams라는 훅으로 받아야 한다.*/}
       </Routes>
 
        
