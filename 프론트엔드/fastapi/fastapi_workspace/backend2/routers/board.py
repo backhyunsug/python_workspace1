@@ -82,3 +82,18 @@ def board_insert(
 
 
 #http://127.0.0.1:8000/static/ACD212F9-B13B-4D8A-BA04-6BC6458F650E.jpeg
+
+@router.get("/view/{id}")
+def board_view(id:int):
+    sql = """
+    select id, title, writer, date_format(wdate, '%Y-%m-%d') wdate
+    , hit, filename, image_url 
+    from tb_board
+    where id=:id
+    """
+    data = [{"id":id}]
+    print(sql)
+    with Database() as db_mgr:
+        results = db_mgr.executeAll(sql, data)
+
+    return {"data": results}
