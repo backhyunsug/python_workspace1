@@ -41,8 +41,8 @@ class IrisClassifier(nn.Module):
                                                #super 가 부모를 뜻함. 두개의 매개변수를 전달한다 
         #입력은닉층 (iris 는 4개의 특성을 갖는다)
         self.fc1 = nn.Linear(4, 16)  #fc1은 그냥 변수임 모델을 저장해 둔다. nn.Linear(입력개수, 출력개수)
-        self.fc2 = nn.Linear(16, 16)  #은닉층
-        self.fc3 = nn.Linear(16, 3)   #출력층( 출력결과가 3이어야 한다. ) 파이토치는 softmax함수 안쓴다 
+        self.fc2 = nn.Linear(16, 8)  #은닉층
+        self.fc3 = nn.Linear(8, 3)   #출력층( 출력결과가 3이어야 한다. ) 파이토치는 softmax함수 안쓴다 
                                       #손실함수에서 softmax함수가 호출된다. 
         self.active = nn.ReLU() #활성화 함수 - relu 
 
@@ -75,10 +75,38 @@ def train_model(epochs):
     print("학습완료")
 
 
+def evaluate_model(): 
+    #모델을 평가모드로 변경한다 
+    model.eval()
+
+    with torch.no_grad(): #그라디언트 계산 비활성화 
+        correct_train =0 #훈련셋이 예측이 잘 맞는경우  카운트하기 위한 변수 
+        total_train = 0 #전체 개수 
+        for inputs, labels in train_loader:
+            outputs = model(inputs)
+            _, predicted = torch.max(outputs.data, 1)  #출력값이 확률, np.argmax쓰듯이 젤 확룰 높은 찾기
+            total_train += labels.size(0)
+            correct_train += (predicted == labels).sum().item() 
+            #현재 16개씩 처리하고 있음 
+        accuracy_train = 100*correct_train/total_train
+        print(f"훈련셋 정확도 :  {accuracy_train}")
+
+    with torch.no_grad(): #그라디언트 계산 비활성화 
+        correct_train =0 #훈련셋이 예측이 잘 맞는경우  카운트하기 위한 변수 
+        total_train = 0 #전체 개수 
+        for inputs, labels in test_loader:
+            outputs = model(inputs)
+            _, predicted = torch.max(outputs.data, 1)  #출력값이 확률, np.argmax쓰듯이 젤 확룰 높은 찾기
+            total_train += labels.size(0)
+            correct_train += (predicted == labels).sum().item() 
+            #현재 16개씩 처리하고 있음 
+        accuracy_train = 100*correct_train/total_train
+        print(f"테스트셋 정확도 :  {accuracy_train}")
 
 
 if __name__ == "__main__":
     train_model(epochs=100)
+    evaluate_model()
 
 
 

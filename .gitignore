@@ -180,3 +180,4 @@ korean_rnn_history
 *.txt
 deeplearning/cc.ko.300.vec
 deeplearning/cc.ko.300.vec
+/파이토치/data
