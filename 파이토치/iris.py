@@ -77,6 +77,20 @@ def train_model(epochs):
 
 
 
+if __name__ == "__main__":
+    train_model(epochs=100)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
