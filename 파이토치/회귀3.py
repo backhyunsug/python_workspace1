@@ -57,9 +57,9 @@ test_loader = DataLoader( test_dataset,  batch_size=32, shuffle=False)
 class HousingClassifier(nn.Module):
     def __init__(self):
         super(HousingClassifier, self).__init__() 
-        self.input = nn.Linear(26, 64) #특성 8 
+        self.input = nn.Linear(26, 128) #특성 8 
         self.relu = nn.ReLU()
-        self.fc1 = nn.Linear(64, 32)
+        self.fc1 = nn.Linear(128, 32)
         self.fc2 = nn.Linear(32, 32)
         self.output = nn.Linear(32, 1) #결과가 하나임 
 
@@ -75,7 +75,7 @@ class HousingClassifier(nn.Module):
         
 model = HousingClassifier()
 criterion = nn.MSELoss() #Mean squared Error  
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 def train_model(epochs=100):
     model.train() #학습모드 
@@ -109,6 +109,6 @@ def evaluate_model():
         print(f'테스트 데이터셋 RMSE    :  {rmse:.4f}')
         
 if __name__ == "__main__":
-    train_model(1000)
+    train_model(20)
     evaluate_model()
 

@@ -68,7 +68,8 @@ def train_model(epochs=100):
                 print(f'Epochs [{epoch+1}/{epochs}]  Step [{i+1}/{len(train_loader)}]  Loss {loss.item():.4f}')
     
     #torch.save(model.state_dict(), 'trained_model_weights.pth')
-    torch.save(model.state_dict(), "mnist.pth") 
+    torch.save(model.state_dict(), "mnist.pth")  #학습한 내용을 저장하기 
+
 
 def evaluate_model():
     with torch.no_grad():
@@ -82,13 +83,15 @@ def evaluate_model():
     accuracy = 100*correct/total 
     print(f"테스트셋 정확도 {accuracy:.2f}%") 
 
-from PIL import Image 
-def predict_image(image_path):
+#이미지 하나를 읽어서 예측하기 
+from PIL import Image  #이미지 처리 라이브러리  
+def predict_image(image_path):#이미지 경로를 입력받는다 
+    #모델 불러오기 
     try:
         # 모델 구조를 다시 정의하고 가중치를 로드하거나, 전체 모델을 로드
         # 여기서는 전체 모델을 로드하는 방식으로 진행
         # 1. 모델 클래스 인스턴스 생성 (필수)
-        loaded_model = ImageClasifier()
+        loaded_model = ImageClasifier() #fastapi 쪽에 클래스가 있어야 한다 
         # 2. state_dict 로드
         loaded_model.load_state_dict(torch.load("mnist.pth"))
     except FileNotFoundError:
@@ -109,6 +112,8 @@ def predict_image(image_path):
         transforms.ToTensor(),                # PIL 이미지를 PyTorch 텐서로 변환 (0~1)
         transforms.Normalize((0.5,), (0.5,))  # 텐서를 정규화
     ])
+
+
     
     # 전처리된 이미지를 텐서로 변환
     image_tensor = transform(image)
@@ -119,10 +124,9 @@ def predict_image(image_path):
 
     # 4. 모델로 예측
     # 모델을 추론 모드로 전환
-    model.eval()
-    
+    loaded_model.eval()
     with torch.no_grad():
-        output = model(image_tensor)
+        output = loaded_model(image_tensor)
         # Softmax를 적용하여 확률로 변환
         probabilities = torch.nn.functional.softmax(output, dim=1)
         # 가장 높은 확률을 가진 클래스(숫자)와 그 확률을 찾음
@@ -133,12 +137,13 @@ def predict_image(image_path):
         print(f"이미지 '{image_path}'의 예측 결과: {predicted_class}")
         print(f"예측 확률: {predicted_prob:.4f}")
 
+    return predicted_class, predicted_prob  ##########################
 
 if __name__ == "__main__":
-    train_model(5)
+    #train_model(10)
     #evaluate_model()
     # 예측할 이미지 파일 경로 지정
-    image_path = './data/mnist_data/0.jpg'  # <-- 여기에 예측하려는 JPEG 파일 경로를 입력하세요
+    image_path = './data/mnist_data/1.jpg'  # <-- 여기에 예측하려는 JPEG 파일 경로를 입력하세요
     
     # 예측 
     predict_image(image_path)
