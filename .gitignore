@@ -181,3 +181,7 @@ korean_rnn_history
 deeplearning/cc.ko.300.vec
 deeplearning/cc.ko.300.vec
 /파이토치/data
+/머신러닝/data/aclImdb
+/머신러닝/data
+/머신러닝
+딥러닝/llm1.py
